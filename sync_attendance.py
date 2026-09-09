@@ -95,12 +95,24 @@ def update_index(overall, monthly, html_path='index.html'):
     print(f'[3/4] Updating {html_path}...')
     with open(html_path, 'r', encoding='utf-8') as f:
         html = f.read()
+
     oj = json.dumps(overall, ensure_ascii=False)
     mj = json.dumps(monthly, ensure_ascii=False)
-    html = re.sub(r'const overallData = \[.*?\];', f'const overallData = {oj};', html, flags=re.DOTALL)
-    html = re.sub(r'const monthlyData = \{.*?\};', f'const monthlyData = {mj};', html, flags=re.DOTALL)
+
+    # 1. Replace overallData
+    start_oj = html.find('const overallData = ') + len('const overallData = ')
+    end_oj = html.find(';\nconst monthlyData = ', start_oj)
+    if start_oj > len('const overallData = ') - 1 and end_oj != -1:
+        html = html[:start_oj] + oj + html[end_oj:]
+
+    # 2. Replace monthlyData
+    start_mj = html.find('const monthlyData = ') + len('const monthlyData = ')
+    end_mj = html.find(';\n\nlet currentTab = ', start_mj)
+    if start_mj > len('const monthlyData = ') - 1 and end_mj != -1:
+        html = html[:start_mj] + mj + html[end_mj:]
+
+    # 3. Update timestamp
     t_str = get_thai_time()
-    
     badge_style = 'display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,0.25);border:1px solid rgba(16,185,129,0.4);padding:5px 12px;border-radius:9999px;color:#d1fae5;font-weight:500;'
     new_badge = f'<span id="updateTimeBadge" style="{badge_style}">⏰ อัพเดทล่าสุด: {t_str}</span>'
     
