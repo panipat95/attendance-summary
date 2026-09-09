@@ -9,19 +9,22 @@ SHEET_ID = '1EQ86CzyKT0JX__siFIZW0u9ZuAmk25iudGXXlX2xcbk'
 SHEET_URL = f'https://docs.google.com/spreadsheets/d/{SHEET_ID}/edit?usp=sharing'
 EXPORT_URL = f'https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=xlsx'
 
-def download_sheet(target_file='temp_sheet.xlsx'):
-    print(f'[1/4] Downloading latest Google Sheet (ID: {SHEET_ID})...')
+def download_sheet(target_file='latest_online.xlsx'):
+    print(f'[1/4] กำลังดาวน์โหลดข้อมูลล่าสุดจาก Google Sheet ID: {SHEET_ID} ...')
     req = urllib.request.Request(EXPORT_URL, headers={'User-Agent': 'Mozilla/5.0'})
-    with urllib.request.urlopen(req, timeout=120) as resp, open(target_file, 'wb') as f:
+    with urllib.request.urlopen(req, timeout=180) as resp, open(target_file, 'wb') as f:
+        downloaded = 0
         while True:
             chunk = resp.read(1024 * 1024)
             if not chunk: break
             f.write(chunk)
-    print('      Download complete.')
+            downloaded += len(chunk)
+            print(f'      ดาวน์โหลดแล้ว: {downloaded / (1024 * 1024):.1f} MB...', end='\r', flush=True)
+    print(f'\n      ดาวน์โหลดเสร็จสมบูรณ์ ({downloaded / (1024 * 1024):.2f} MB)')
     return target_file
 
 def extract_data(excel_file):
-    print('[2/4] Extracting data from sheets...')
+    print('[2/4] กำลังประมวลผลข้อมูลจากชีท...')
     wb = openpyxl.load_workbook(excel_file, data_only=True, read_only=True)
     overall = []
     ws_sep = wb['สรุปแยก']
@@ -92,7 +95,7 @@ def get_thai_time():
     return f'{now.day} {all_th[now.month]} {now.year+543} เวลา {now.strftime("%H:%M:%S")} น.'
 
 def update_index(overall, monthly, html_path='index.html'):
-    print(f'[3/4] Updating {html_path}...')
+    print(f'[3/4] กำลังอัพเดท {html_path}...')
     with open(html_path, 'r', encoding='utf-8') as f:
         html = f.read()
 
@@ -125,23 +128,23 @@ def update_index(overall, monthly, html_path='index.html'):
         
     with open(html_path, 'w', encoding='utf-8') as f:
         f.write(html)
-    print(f'[4/4] index.html updated successfully! ({t_str})')
+    print(f'[4/4] อัพเดท {html_path} เรียบร้อยแล้ว! ({t_str})')
 
 def main():
     t0 = time.time()
-    target = 'temp_download.xlsx'
-    if len(sys.argv) > 1 and os.path.exists(sys.argv[1]):
+    target = 'latest_online.xlsx'
+    if len(sys.argv) > 1 and sys.argv[1] == '--cached' and os.path.exists(target):
+        efile = target
+        print(f'ใช้ไฟล์แคชเดิม: {efile}')
+    elif len(sys.argv) > 1 and os.path.exists(sys.argv[1]):
         efile = sys.argv[1]
-    elif os.path.exists('latest_online.xlsx'):
-        efile = 'latest_online.xlsx'
+        print(f'ใช้ไฟล์ที่ระบุ: {efile}')
     else:
         efile = download_sheet(target)
+
     ov, mo = extract_data(efile)
     update_index(ov, mo, 'index.html')
-    if efile == target and os.path.exists(target):
-        try: os.remove(target)
-        except: pass
-    print(f'Done in {time.time() - t0:.2f}s')
+    print(f'✅ อัพเดทข้อมูลสำเร็จใน {time.time() - t0:.2f} วินาที!')
 
 if __name__ == '__main__':
     main()
