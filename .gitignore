@@ -1,0 +1,6 @@
+﻿*.xlsx
+__pycache__/
+temp_push*
+latest_online.xlsx
+downloaded_sheet.xlsx
+*.log

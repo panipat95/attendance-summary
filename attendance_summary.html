@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบสรุปสถิติโฮมรูม จิตศึกษา และการเข้าแถว ม.1 (ภาคเรียนที่ 1/2569)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --pink-main: #db2777;
+            --pink-bg: #fdf2f8;
+            --pink-border: #fbcfe8;
+            --orange-main: #ea580c;
+            --orange-bg: #fff7ed;
+            --orange-border: #fed7aa;
+            --teal-main: #0d9488;
+            --teal-bg: #f0fdfa;
+            --teal-border: #99f6e4;
+            --bg-page: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Sarabun', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            padding: 24px 16px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1360px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: #ffffff;
+            padding: 26px 32px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .header p {
+            font-size: 15px;
+            opacity: 0.92;
+        }
+
+        /* Tabs Navigation */
+        .tabs-nav {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .tab-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-size: 14.5px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary);
+            border-color: #cbd5e1;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.25);
+        }
+
+        .tab-btn.active.pink-tab {
+            background: var(--pink-main);
+            border-color: var(--pink-main);
+        }
+
+        .tab-btn.active.teal-tab {
+            background: var(--teal-main);
+            border-color: var(--teal-main);
+        }
+
+        .legend-banner {
+            display: flex;
+            gap: 16px;
+            margin-top: 14px;
+            flex-wrap: wrap;
+        }
+
+        .legend-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13.5px;
+            font-weight: 500;
+            backdrop-filter: blur(4px);
+        }
+
+        .color-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+        .dot-pink { background-color: #f472b6; }
+        .dot-orange { background-color: #fb923c; }
+        .dot-teal { background-color: #2dd4bf; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            padding: 16px 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .stat-card .label {
+            font-size: 13.5px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .stat-card .val {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .action-bar {
+            background: var(--bg-card);
+            padding: 16px 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 240px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 14px 10px 38px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        .filter-select {
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            background: #fff;
+            color: var(--text-main);
+            cursor: pointer;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-success { background-color: #059669; color: white; }
+        .btn-success:hover { background-color: #047857; }
+
+        .btn-primary { background-color: var(--primary); color: white; }
+        .btn-primary:hover { background-color: var(--primary-hover); }
+
+        .card-table {
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            padding: 14px 16px;
+            font-weight: 600;
+            font-size: 13.5px;
+            border-bottom: 2px solid var(--border);
+            white-space: nowrap;
+        }
+
+        th.th-default { background-color: #f8fafc; color: #475569; }
+        th.th-pink { background-color: #fdf2f8; color: var(--pink-main); border-bottom: 2px solid #fbcfe8; }
+        th.th-orange { background-color: #fff7ed; color: var(--orange-main); border-bottom: 2px solid #fed7aa; }
+        th.th-teal { background-color: #f0fdfa; color: var(--teal-main); border-bottom: 2px solid #99f6e4; }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+            vertical-align: top;
+        }
+
+        tr:hover td { background-color: #f8fafc; }
+
+        .col-no { width: 50px; text-align: center; font-weight: 600; color: var(--text-muted); }
+        .col-name { width: 220px; font-weight: 600; color: #0f172a; }
+        .col-room { width: 90px; text-align: center; }
+
+        .room-badge {
+            display: inline-block;
+            background-color: #e0e7ff;
+            color: #3730a3;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .reason-box {
+            position: relative;
+            border-radius: 8px;
+            padding: 12px 14px;
+            font-size: 13px;
+            line-height: 1.6;
+            white-space: pre-line;
+            min-height: 48px;
+        }
+
+        .reason-box.pink { background: var(--pink-bg); border: 1px solid var(--pink-border); color: #831843; }
+        .reason-box.orange { background: var(--orange-bg); border: 1px solid var(--orange-border); color: #7c2d12; }
+        .reason-box.teal { background: var(--teal-bg); border: 1px solid var(--teal-border); color: #115e59; }
+
+        .reason-box.empty {
+            background: #fafafa;
+            border: 1px solid #e5e7eb;
+            color: #94a3b8;
+            font-style: italic;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .reason-box .copy-cell-btn {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            opacity: 0;
+            transition: opacity 0.2s;
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            color: #374151;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .reason-box:hover .copy-cell-btn { opacity: 1; }
+        .reason-box.pink .copy-cell-btn:hover { background: var(--pink-main); color: #fff; border-color: var(--pink-main); }
+        .reason-box.orange .copy-cell-btn:hover { background: var(--orange-main); color: #fff; border-color: var(--orange-main); }
+        .reason-box.teal .copy-cell-btn:hover { background: var(--teal-main); color: #fff; border-color: var(--teal-main); }
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background-color: #1e293b;
+            color: #ffffff;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.2);
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 9999;
+        }
+
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast-success-icon { color: #34d399; font-size: 18px; }
+
+        .tips-banner {
+            margin-top: 24px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 10px;
+            padding: 14px 18px;
+            font-size: 13.5px;
+            color: #166534;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>📊 ระบบสรุปสถิติการเข้าแถว โฮมรูม และจิตศึกษา ม.1</h1>
+        <p>ภาคเรียนที่ 1 ปีการศึกษา 2569 | ข้อมูลจำแนกครบทั้ง 30 ท่านตามรูปแบบชีต</p>
+        <div class="meta-badges" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px;font-size:13px;"><a href="https://docs.google.com/spreadsheets/d/1EQ86CzyKT0JX__siFIZW0u9ZuAmk25iudGXXlX2xcbk/edit?usp=sharing" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.2);backdrop-filter:blur(8px);padding:5px 12px;border-radius:9999px;color:#fff;text-decoration:none;font-weight:500;border:1px solid rgba(255,255,255,0.3);"><span>🔗 ลิงก์ชีทออนไลน์ (ID: 1EQ86CzyKT0J...)</span> ↗</a><span id="updateTimeBadge" style="display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,0.25);border:1px solid rgba(16,185,129,0.4);padding:5px 12px;border-radius:9999px;color:#d1fae5;font-weight:500;">⏰ อัพเดทล่าสุด: 9 ก.ย. 2569 เวลา 17:52:30 น.</span></div>
+        <div class="legend-banner">
+            <div class="legend-tag">
+                <span class="color-dot dot-pink"></span>
+                <span><b>ช่องสีชมพู</b> = กิจกรรมโฮมรูม (15 ครั้ง)</span>
+            </div>
+            <div class="legend-tag">
+                <span class="color-dot dot-orange"></span>
+                <span><b>ช่องสีส้ม</b> = กิจกรรมจิตศึกษา (13 ครั้ง)</span>
+            </div>
+            <div class="legend-tag">
+                <span class="color-dot dot-teal"></span>
+                <span><b>การเข้าแถว</b> = จำแนกรายเดือน (พ.ค. - ก.ย.)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="tabs-nav">
+        <button class="tab-btn active" onclick="switchTab('all')">📑 สรุปภาพรวมตลอดเทอม (สรุปแยก)</button>
+        <button class="tab-btn" onclick="switchTab('5')">📅 เดือน พฤษภาคม (เข้าแถว พ.ค จพศ)</button>
+        <button class="tab-btn" onclick="switchTab('6')">📅 เดือน มิถุนายน (เข้าแถว มิ.ย จพศ)</button>
+        <button class="tab-btn" onclick="switchTab('7')">📅 เดือน กรกฎาคม (เข้าแถว ก.ค จพศ)</button>
+        <button class="tab-btn" onclick="switchTab('8')">📅 เดือน สิงหาคม (เข้าแถว ส.ค. จพศ)</button>
+        <button class="tab-btn" onclick="switchTab('9')">📅 เดือน กันยายน (เข้าแถว ก.ย. จพศ)</button>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid" id="statsContainer">
+        <!-- Dynamic Stats -->
+    </div>
+
+    <!-- Toolbar -->
+    <div class="action-bar">
+        <div class="search-box">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="searchInput" placeholder="พิมพ์ค้นหาชื่อครู หรือห้องเรียน เช่น 'วราวุฒิ', 'ม.1.9'...">
+        </div>
+
+        <select class="filter-select" id="roomFilter">
+            <option value="all">แสดงทุกห้องเรียน (ม.1.1 - ม.1.21)</option>
+        </select>
+
+        <div class="btn-group">
+            <button class="btn btn-success" id="btnCopyExcel" onclick="copyActiveTableForExcel()">
+                <span>📋</span> คัดลอกตารางนี้สำหรับ Excel (วางในชีต)
+            </button>
+            <button class="btn btn-primary" id="btnCopyText" onclick="copyActiveTextSummary()">
+                <span>📑</span> คัดลอกข้อความสรุปทั้งหมด
+            </button>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="card-table">
+        <div class="table-responsive">
+            <table id="mainTable">
+                <thead id="tableHead">
+                    <!-- Dynamic Headers -->
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Dynamic Rows -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="tips-banner">
+        <span style="font-size: 20px;">💡</span>
+        <div id="tipsText">
+            <strong>วิธีนำไปใช้งาน:</strong> เลือกแท็บเดือนที่ต้องการ จากนั้นกดปุ่ม <b>"คัดลอกตารางนี้สำหรับ Excel"</b> แล้วเปิดไฟล์ Excel ในชีตที่ตรงกัน คลิกที่ช่อง <b>A5 (ลำดับที่ 1)</b> แล้วกด <code>Ctrl + V</code> ได้เลย ข้อมูลจะวางลงตรงช่องทุกคอลัมน์ทันทีครับ
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast">
+    <span class="toast-success-icon">✔</span>
+    <span id="toastMsg">คัดลอกข้อมูลเรียบร้อยแล้ว</span>
+</div>
+
+<script>
+const overallData = [{"no": 1, "name": "นายวราวุฒิ    วงค์น้อย", "room": "ม.1.1", "lineup_summary": "-", "homeroom_summary": "ไม่เข้าโฮมรูม จำนวน 7 ครั้ง
+- ร่วมประชุมสายชั้นม.1 อาคารจามจุรี 1 ครั้ง
+- เก็บใบสมัครนักเรียนสอบโอลิมปิกดาราศาสตร์ ม.ต้น ห้อง 222 1 ครั้ง
+- อัดคลิป science show 1 ครั้ง
+- ประชุมโอลิมปิกวิชาการ ณ อาคารจามจุรี 1 ครั้ง
+- ร่วมพิธีถวายพระพรฯ ฝั่ง ม.ปลาย 1 ครั้ง
+- ร่วมประกวดสื่อการสอน ในงานสัปดาห์วิทยาศาสตร์ ณ มหาวิทยาลัยแม่ฟ้าหลวง 1 ครั้ง
+- เดินทางไปแข่งขันทักษะวิชาการ จ.ระยอง 1 ครั้ง", "chitsuksa_summary": "ไม่เข้ากิจกรรมจิตศึกษา จำนวน 8 ครั้ง
+- ประชุมนักเรียนสอบโอลิมปิกดาราศาสตร์ 1 ครั้ง
+- เดินทางไปราชการ เพื่อเข้าร่วมโครงการขับเคลื่อนยกระดับคุณภาพการศึกษาท้องถิ่นและผลการประเมิน PISA ที่ กรุงเทพฯ 1 ครั้ง
+- ลาป่วย 1 ครั้ง
+- ติวดาราศาสตร์ 1 ครั้ง
+- ติวโอลิมปิก ณ ห้อง 231 1 ครั้ง
+- ร่วมประกวดสื่อการสอน ในงานสัปดาห์วิทยาศาสตร์ ณ มหาวิทยาลัยแม่ฟ้าหลวง 1 ครั้ง
+- เดินทางไปแข่งขันทักษะวิชาการ จ.ระยอง 1 ครั้ง
+- ติดประชุมชี้แจงสอบ Tedet 1 ครั้ง", "homeroom_count": 7, "chitsuksa_count": 8, "total_missed": 15}, {"no": 2, "name": "นางสาววริศลา  ศักดิ์แสน", "room": "ม.1.1", "lineup_summary": "-", "homeroom_summary": "ไม่เข้าโฮมรูม จำนวน 6 ครั้ง
+- ไม่ระบุสาเหตุ 1 ครั้ง
+- ฝึกซ้อมแข่งทักษะ 1 ครั้ง
+- ร่วมพิธีถวายพระพรฯ ฝั่ง ม.ปลาย 1 ครั้ง
+- ฝึกซ้อมทักษะ 3 ครั้ง", "chitsuksa_summary": "ไม่เข้ากิจกรรมจิตศึกษา จำนวน 8 ครั้ง
+- ฝึกซ้อมแข่งทักษะ 2 ครั้ง
+- เดินทางไปแข่งทักษะวิชาการ 1 ครั้ง
+- ฝึกซ้อมทักษะการแข่งขันหุ่นยนต์ ณ ห้อง 311 1 ครั้ง
+- ฝึกซ้อมทักษะ 2 ครั้ง
+- ร่วมประชุม การแข่งทักษะ ห้องลีลาวดี 1 ครั้ง
+- ลาป่วย 1 ครั้ง", "homeroom_count": 6, "chitsuksa_count": 8, "total_missed": 14}, {"no": 3, "name": "นางสาวเปรมฤดี    ไชยรัตน์", "room": "ม.1.2", "lineup_summary": "-", "homeroom_summary": "ไม่เข้าโฮมรูม จำนวน 5 ครั้ง
+- คุมสอบคัดเลือกนักเรียนคนเก่งคณิตศาสตร์ค่ะ 1 ครั้ง
+- นำนักเรียนคนเก่งพบผู้บริหารที่อาคารจามจุรี 1 ครั้ง
+- ประชุมวิชาการ 1 ครั้ง
+- ประชุมโอลิมปิกวิชาการที่อาคารจามจุรี 1 ครั้ง
+- ร่วมพิธีถวายพระพรฯ ฝั่ง ม.ปลาย 1 ครั้ง", "chitsuksa_summary": "ไม่เข้ากิจกรรมจิตศึกษา จำนวน 5 ครั้ง
+- ติวคนเก่งคณิตศาสตร์ 1 ครั้ง
+- เดินทางไปศึกษาดูงานที่โรงเรียนบุณยวาทย์ จ. ลำปาง 1 ครั้ง
+- ดูแลนักเรียน แนะแนวโอลิมปิกวิชาการ ที่ห้องพญาสัตบรรณ 1 ครั้ง
+- เข้าร่วมกิจกรรมอบรมคุณธรรม ที่อาคาร GMS 1 ครั้ง
+- จัดกิจกรรมการแข่งขัน 180IQ 1 ครั้ง", "homeroom_count": 5, "chitsuksa_count": 5, "total_missed": 10}, {"no": 4, "name": "นางสาวอังคณา  ฮ่วนสกุล", "room": "ม.1.3", "lineup_summary": "-", "homeroom_summary": "ไม่เข้าโฮมรูม จำนวน 10 ครั้ง
+- ซ้อมโครงงานวิทยาศาสตร์ 4 ครั้ง
+- เดินทางไปแข่งทักษะวิชาการ 1 ครั้ง
+- ประชุมวิชาการ ม.ต้น 1 ครั้ง
+- ซ้อมทักษะวิชาการ(โครงงาน) 3 ครั้ง
+- ร่วมพิธีถวายพระพรฯ ฝั่ง ม.ปลาย 1 ครั้ง", "chitsuksa_summary": "ไม่เข้ากิจกรรมจิตศึกษา จำนวน 7 ครั้ง
+- เดินทางไปศึกษาดูงานที่โรงเรียนบุณยวาทย์ จ. ลำปาง 1 ครั้ง
+- ซ้อมโครงงานวิทยาศาสตร์ 1 ครั้ง
+- เดินทางไปแข่งทักษะวิชาการ 1 ครั้ง
+- ซ้อมทักษะวิชาการ(โครงงาน) 2 ครั้ง
+- วิพากษ์โครงงาน และคนเก่งท้องถิ่นที่อาคาร GMS 1 ครั้ง
+- ประชุมชี้แจงนักเรียนสอบ TEDET 1 ครั้ง", "homeroom_count": 10, "chitsuksa_count": 7, "total_missed": 17}, {"no": 5, "name": "นายเขตตะวัน กันแก้ว", "room": "ม.1.3", "lineup_summary": "-", "homeroom_summary": "ไม่เข้าโฮมรูม จำนวน 5 ครั้ง
+- ฝึกซ้อมทักษะคอมพิวเตอร์ 2 ครั้ง
+- ร่วมพิธีถวายพระพรฯ ฝั่ง ม.ปลาย 1 ครั้ง
+- ซ้อมนักเรียนแข่งทักษะ 2 ครั้ง", "chitsuksa_summary": "ไม่เข้ากิจกรรมจิตศึกษา จำนวน 8 ครั้ง
+- ฝึกซ้อมทักษะคอมพิวเตอร์ 3 ครั้ง
+- ประชุมเด็กอบรมAI วันเสาร์ ที่ 20 มิถุนายน 2569 ที่ศูนย์จีน 1 ครั้ง
+- ขออนุญาตเข้าสาย 1 ครั้ง
+- จัดเตรียมของไป นำเสนองานวันวิทย์ 1 ครั้ง
+- ซ้อมนักเรียนแข่งทักษะ 2 ครั้ง", "homeroom_count": 5, "chitsuksa_count": 8, "total_missed": 13}, {"no": 6, "name": "นางสาวพรรณนิภา  มูลโมกข์", "room": "ม.1.4", "lineup_summary": "-", "homeroom_summary": "ไม่เข้าโฮมรูม จำนวน 4 ครั้ง
+- ครูพรรณนิภาขออนุญาตไม่เข้าแถวและโฮมรูมเนื่องจากติวคนเก่งภาษาไทย 1 ครั้ง
+- ดูแลนักเรียน แข่งขันเล่าเรื่องจากภาพในกิจกรรมวันภาษาไทย 1 ครั้ง
+- ครูที่ปรึกษา 1.4 ขออนุญาตไม่เข้าแถวเนื่องจากฝึกซ้อมนักเรียนแข่งขันคำคมภาษาไทย 2 ครั้ง", "chitsuksa_summary": "ไม่เข้ากิจกรรมจิตศึกษา จำนวน 2 ครั้ง
+- ควบคุมสอบแข่งทักษะภาษาไทยที่โรงอาหาร 1 ครั้ง
+- ครูที่ปรึกษา 1.4 ขออนุญาตไม่เข้าแถวเนื่องจากฝึกซ้อมนักเรียนแข่งขันคำคมภาษาไทย 1 ครั้ง", "homeroom_count": 4, "chitsuksa_count": 2, "total_missed": 6}, {"no": 7, "name": "นางสาวฐิติพร ดอนชัย", "room": "ม.1.5", "lineup_summary": "-", "homeroom_summary": "ไม่เข้าโฮมรูม จำนวน 7 ครั้ง
+-ประชุม LEC 1 ครั้ง
+-สัมภาษณ์คัดเลือกนักเรียนพระราชทาน 2 ครั้ง
+-ติดเคสดูแลช่วยเหลือนักเรียน 1 ครั้ง 
+-อบรมและให้คำปรึกษานักเรียนYC 1 ครั้ง
+-ประชุมและฝึกซ้อมนร. แข่งทักษะ YC 1 ครั้ง
+-ฝึกซ้อมนร. แข่งทักษะ YC 1 ครั้ง", "chitsuksa_summary": "ไม่เข้าจิตศึกษา  จำนวน 7 ครั้ง
+-ลากิจ 1 ครั้ง
+-ลาป่วย 1 ครั้ง
+-อบรมเพศวิถี 1 ครั้ง
+-ประชุมนักเรียนYC 1 ครั้ง
+-พานักเรียนรับทุนที่ห้องลีลาวดี 1 ครั้ง
+-ฝึกซ้อมนร. แข่งทักษะ YC 2 ครั้ง", "homeroom_count": 7, "chitsuksa_count": 7, "total_missed": 14}, {"no": 8, "name": "นายอุกฤษฎ์    ยังท่าไม้", "room": "ม.1.6", "lineup_summary": "-", "homeroom_summary": "ไม่เข้าโฮมรูม จำนวน 10 ครั้ง
+-ซ้อมแข่งขันทักษะศิลปะ 3 ครั้ง
+-พานักเรียนไปแข่งขันทักษะวิชาการ 1 ครั้ง
+-ไปรับพระคุณเจ้าม งานโครงการอบรมคุณธรรม GMS 1 ครั้ง
+-ซ้อมโครงงาน 1 ครั้ง
+-ดูแลนักเรียนทำกิจกรรมทำบุญตักบาตร ที่ศูนย์จีน 1 ครั้ง
+-ดูแลนักเรียนฝึกซ้อมแข่งทักษะ 2 ครั้ง
+-พานักเรียนไปแข่งขันทักษะวิชาการ ที่ จ.ระยอง 1 ครั้ง", "chitsuksa_summary": "ไม่เข้ากิจกรรมจิตศึกษา จำนวน 11 ครั้ง
+- ซ้อมแข่งขันทักษะศิลปะ 3 ครั้ง
+- พานักเรียนไปแข่งขันทักษะวิชาการ 1 ครั้ง
+- ไม่ระบุสาเหตุ 1 ครั้ง
+- ไปรับพระคุณเจ้าม งานโครงการอบรมคุณธรรม GMS 1 ครั้ง
+- เตรียมงานหล่อเทียนพรรษาที่หอประชุมพญามังราย 1 ครั้ง
+- ซ้อมโครงงาน 1 ครั้ง
+- รับรางวัลแข่งขันทักษะที่ฝั่งม.ปลาย 1 ครั้ง
+- ประชุมแข่งทักษะ 1 ครั้ง
+- พานักเรียนไปแข่งขันทักษะวิชาการ ที่ จ.ระยอง 1 ครั้ง", "homeroom_count": 10, "chitsuksa_count": 11, "total_missed": 21}, {"no": 9, "name": "นางสาวสุทธิดา ชินประกายรัตน์", "room": "ม.1.6", "lineup_summary": "-", "homeroom_summary": "ไม่เข้าโฮมรูม จำนวน 9 ครั้ง
+- ซ้อมแข่งขันโครงงานสังคมศึกษา 3 ครั้ง
+- ประชุมนักเรียนต้นกล้าคุณธรรม 1 ครั้ง
+- เข้าร่วมกิจกรรมอบรมคุณธรรม ที่อาคาร GMS 1 ครั้ง
+- นับยอดเงินร่วมบริจาคหล่อเทียนพรรษา 1 ครั้ง
+- ดูแลนักเรียนทำกิจกรรมทำบุญตักบาตร ที่ศูนย์จีน 1 ครั้ง
+- ซ้อมโครงงานสังคมศึกษา 1 ครั้ง
+- ประชุมงานนักเรียนต้นกล้าคุณธรรม 1 ครั้ง", "chitsuksa_summary": "ไม่เข้ากิจกรรมจิตศึกษา จำนวน 6 ครั้ง
+- ซ้อมแข่งขันโครงงานสังคมศึกษา 3 ครั้ง
+- เข้าร่วมกิจกรรมอบรมคุณธรรม ที่อาคาร GMS 1 ครั้ง
+- ขออนุญาตเข้าสายเนื่องจากรถเสียระหว่างทาง 1 ครั้ง
+- ซ้อมโครงงานสังคมศึกษา 1 ครั้ง", "homeroom_count": 9, "chitsuksa_count": 6, "total_missed": 15}, {"no": 10, "name": "นายเสรี   กาบใส", "room": "ม.1.7", "lineup_summary": "-", "homeroom_summary": "ไม่เข้าโฮมรูม จำนวน 15 ครั้ง
+- ติดงานจราจร 15 ครั้ง", "chitsuksa_summary": "ไม่เข้ากิจกรรมจิตศึกษา จำนวน 13 ครั้ง
+- ติดงานจราจร 13 ครั้ง", "homeroom_count": 15, "chitsuksa_count": 13, "total_missed": 28}, {"no": 11, "name": "นางสาวศิริลักษณ์ ยอดคำ", "room": "ม.1.7", "lineup_summary": "-", "homeroom_summary": "ไม่เข้าโฮมรูม จำนวน 9 ครั้ง
+- คุมสอบคัดเลือกนักเรียน คนเก่งคณิตศาสตร์ 1 ครั้ง
+- ลาป่วย เนื่องจากปวดหัวค่ะ 1 ครั้ง
+- ติวนักเรียนคนเก่งคณิตศาสตร์ 1 ครั้ง
+- ฝึกซ้อมซูโดะคุ ไปแข่งที่จ.เชียงใหม่ 1 ครั้ง
+- คุมนักเรียนสอบ 1 ครั้ง
+- วันไหว้ครู 1 ครั้ง
+- นร.แข่งขันซูโดคุ 1 ครั้ง
+- ฝึกซ้อมนักเรียน ซูโดกุ 1 ครั้ง
+- ฝึกซ้อมนร.แข่งทักษะ 1 ครั้ง", "chitsuksa_summary": "ไม่เข้ากิจกรรมจิตศึกษา จำนวน 2 ครั้ง
+- ลาป่วย เนื่องจากปวดหัว 1 ครั้ง
+- ฝึกซ้อมนร.แข่งทักษะ 1 ครั้ง", "homeroom_count": 9, "chitsuksa_count": 2, "total_missed": 11}, {"no": 12, "name": "นางนพมาศ วงค์ใหญ่", "room": "ม.1.8", "lineup_summary": "-", "homeroom_summary": "ไม่เข้าโฮมรูม จำนวน 7 ครั้ง
+- ซ้อมโครงงานนักเรียน 1 ครั้ง
+- ฝึกซ้อมนักเรียนโครงงานที่ห้อง 621 1 ครั้ง
+- ฝึกซ้อมนักเรียนโครงงานภาษาไทยที่ห้อง 621 1 ครั้ง
+- แข่งขันเล่าเรื่องจากภาพในกิจกรรมวันภาษาไทย 1 ครั้ง
+- ให้คำปรึกษานักเรียนที่ห้องสมุด 1 ครั้ง
+- ครูติวคนเก่งภาษาไทย 1 ครั้ง
+- ครูลากิจ 1 ครั้ง", "chitsuksa_summary": "ไม่เข้ากิจกรรมจิตศึกษา จำนวน 4 ครั้ง
+- ติวคนเก่งภาษาไทย 1 ครั้ง
+- ฝึกซ้อมนักเรียนโครงงานภาษาไทยที่ห้อง 621 1 ครั้ง
+- ครูร่วมพิธีเปิดการอบรมแผนป้องกันแผ่นดินไหวและอัคคีภัย ณ หอประชุมพญามังราย 1 ครั้ง
+- ครูลาป่วย 1 ครั้ง", "homeroom_count": 7, "chitsuksa_count": 4, "total_missed": 11}, {"no": 13, "name": "นางอรพรพรรณ ทาใหม่", "room": "ม.1.9", "lineup_summary": "-", "homeroom_summary": "ไม่เข้าโฮมรูม จำนวน 5 ครั้ง
+- คุมสอบคัดเลือกนักเรียนคนเก่งคณิตศาสตร์  1 ครั้ง
+- ดูแลนักเรียนแข่งขัน A-Math  1 ครั้ง
+- ร่วมพิธีถวายพระพรฯ ฝั่งม.ปลาย 1 ครั้ง
+- ซ้อมนักเรียนเตรียมแข่งขันทักษะ 2 ครั้ง", "chitsuksa_summary": "ไม่เข้าทำจิตศึกษา จำนวน 2 ครั้ง
+- ดูแลนักเรียนแข่งขัน  108 IQ  1 ครั้ง", "homeroom_count": 5, "chitsuksa_count": 2, "total_missed": 7}, {"no": 14, "name": "นางเกศมณี ลัทธิเดช", "room": "ม.1.10", "lineup_summary": "-", "homeroom_summary": "ไม่เข้าโฮมรูม จำนวน 5 ครั้ง
+- ประชุมกับหัวหน้าสายชั้น 1 ครั้ง
+- ร่วมพิธีถวายพระพรฯ ฝั่ง ม.ปลาย 1 ครั้ง
+- ฝึกซ้อม นร. โครงงานstem 1 ครั้ง
+- ลากิจ 1 ครั้ง
+- ฝึกซ้อมนักเรียนแข่งขันโครงงานstem 1 ครั้ง", "chitsuksa_summary": "ไม่เข้ากิจกรรมจิตศึกษา จำนวน 2 ครั้ง
+- ติวโอลิมปิคดาราสาตร์ 1 ครั้ง
+- ฝึกซ้อม นร. โครงงานstem 1 ครั้ง", "homeroom_count": 5, "chitsuksa_count": 2, "total_missed": 7}, {"no": 15, "name": "นายกิษกินต์ เบิกบาน", "room": "ม.1.11", "lineup_summary": "-", "homeroom_summary": "ไม่เข้าโฮมรูม จำนวน 2 ครั้ง
+- ไม่เข้าแถว เนื่องจากส่งบุตรที่เนิสเซอรี่ทำมีกิจกรรมวันปลูกต้นไม้เช้า 1 ครั้ง
+- ไม่เข้า เนื่องจากไปรับบุตรจากเนอร์สเซอรี่ 1 ครั้ง", "chitsuksa_summary": "ไม่เข้ากิจกรรมจิตศึกษา จำนวน 4 ครั้ง
+- ไม่เข้าแถวหน้าห้อง เนื่องจากมีประชุมกับผู้บริหาร ฝั่งม.ปลาย 1 ครั้ง
+- ไม่ได้ขึ้นโฮมรูม เนื่องจากซ้อมเด็กสู่สนาม 1 ครั้ง
+- ไม่เข้าเนื่องจากไปรับบุตรจากเนอร์สเซอรี่ 1 ครั้ง
+- ไม่เข้า เนื่องจาก ไปส่งบุตรที่เนอสเซอรี่ 1 ครั้ง", "homeroom_count": 2, "chitsuksa_count": 4, "total_missed": 6}, {"no": 16, "name": "นางสาวกมลลักษณ ยอดสุวรรณ์", "room": "ม.1.11", "lineup_summary": "-", "homeroom_summary": "ไม่เข้าโฮมรูม จำนวน 4 ครั้ง
+- ไม่เข้าแถว หน้าห้อง เนื่องจากซ้อมโครงงาน 1 ครั้ง
+- ไม่เข้าแถวและขึ้นโฮมรูมเนื่องจาก ซ้อมโครงงานนักเรียน 1 ครั้ง
+- ไม่เข้าแถวและโฮมรูม เนื่องจากฝึกซ้อมนักเรียน ซูโดกุ 1 ครั้ง
+- ไม่เข้า เนื่องจากมาประชุมกรรมการการแข่งขันศิลปหัตถกรรมที่ รร. สามัคคี 1 ครั้ง", "chitsuksa_summary": "ไม่เข้ากิจกรรมจิตศึกษา จำนวน 8 ครั้ง
+- ไม่ได้เข้าแถวเนื่องจากฝึกซ้อมโครง งานนักเรียนที่ห้อง 434 1 ครั้ง
+- ครูกมลลักษณ์ ขออนุญาตไม่เข้าแถว หน้าห้อง เนื่องจากซ้อมโครงงาน คณิตศาสตร์ห้อง 434 ค่ะ 1 ครั้ง
+- ไม่เข้าแถว หน้าห้อง เนื่องจากซ้อมโครงงาน ห้อง 434 1 ครั้ง
+- ไม่เข้าแถวหน้าห้อง เนื่องจากซ้อมโครงงาน ที่ห้อง434 2 ครั้ง
+- ไม่เข้าแถว เนื่องจากไปประชุมแข่งขันทักษะวิชาการที่ห้องลีลาวดี 1 ครั้ง
+- ไม่เข้า เนื่องจากจัดการแข่งขัน 108 IQ 1 ครั้ง
+- ไม่เข้าแถว เนื่องจากซ้อมนักเรียนแข่งขัน ศิลปหัตถกรรม 1 ครั้ง", "homeroom_count": 4, "chitsuksa_count": 8, "total_missed": 12}, {"no": 17, "name": "นางสาวดุษฎี พงษ์ตานี", "room": "ม.1.12", "lineup_summary": "-", "homeroom_summary": "ไม่เข้าโฮมรูม จำนวน 5 ครั้ง
+- ประชุมค่ายภูมิศาสตร์ ที่ศูนย์จีน 1 ครั้ง
+- ประชุมนักเรียนค่ายภูมิศาสตร์ ที่ศูนย์จีน 1 ครั้ง
+- สัมภาษณ์คัดเลือกนักเรียนพระราชทาน 1 ครั้ง
+- สัมภาษณ์คัดเลือกนักเรียนพระราชทานรอบ2 1 ครั้ง
+- ร่วมพิธีถวายพระพรฯ ฝั่ง ม.ปลาย 1 ครั้ง", "chitsuksa_summary": "ไม่เข้ากิจกรรมจิตศึกษา จำนวน 3 ครั้ง
+- นักเรียนเข้าค่ายคุณธรรม 1 ครั้ง
+- พานักเรียนวิชาเลือกเสรีกฎหมาย มาศึกษาดูงานที่สถานพินิจฯ 1 ครั้ง
+- ให้ฝ่ายโสต ถ่ายรูปงานนักเรียนพระราชทาน 1 ครั้ง", "homeroom_count": 5, "chitsuksa_count": 3, "total_missed": 8}, {"no": 18, "name": "นางสาวสิริพรรณ วังมณี", "room": "ม.1.13", "lineup_summary": "-", "homeroom_summary": "ไม่เข้าโฮมรูมจำนวน 9 ครั้ง
+- ซ้อมนักเรียนแข่งทักษะ 4 ครั้ง
+- กิจการสภาเชิญมาประดับเข็มสภา ที่ฝั่งม.ปลาย 1 ครั้ง
+- ซ้อมโครงงานที่ห้องพญาสัตบรรณ 1 ครั้ง
+- เข้าร่วมโครงการอบรมคุณธรรม GMS 1 ครั้ง
+- ร่วมพิธีถวายพระพรฯ ฝั่ง ม.ปลาย 1 ครั้ง
+- ประชุม ที่ฝั่งม.ปลาย 1 ครั้ง", "chitsuksa_summary": "ไม่เข้าจิตศึกษาจำนวน 7 ครั้ง
+- ฝึกซ้อมนักเรียนแข่งขันทักษะ 3 ครั้ง
+- เดินทางไปศึกษาดูงานที่โรงเรียนบุณยวาทย์ จ. ลำปาง 1 ครั้ง
+- ครูที่ปรึกษาติดค่ายคุณธรรม 1 ครั้ง
+- ครูร่วมพิธีเปิดการอบรมแผนป้องกันแผ่นดินไหวและอัคคีภัย ณ หอประชุมพญามังราย 1 ครั้ง
+- ครูที่ปรึกษาไปพบแพทย์ 1 ครั้ง", "homeroom_count": 9, "chitsuksa_count": 7, "total_missed": 16}, {"no": 19, "name": "นางสาวธนาวัฒน์ รอดไทยสงค์", "room": "ม.1.13", "lineup_summary": "-", "homeroom_summary": "ไม่่เข้าโฮมรูมจำนวน  8 ครั้ง
+- ประชุมนักเรียนค่ายภูมิศาสตร์ 1 ครั้ง
+- ประชุมนักเรียนต้นกล้าคุณธรรม 1 ครั้ง
+- สัมภาษณ์คัดเลือกนักเรียนพระราชทาน 2 ครั้ง
+- เข้าร่วมโครงการอบรมคุณธรรม GMS 1 ครั้ง
+- เนื่องจากนับเงินและสรุปยอดเงินร่วมทำบุญ 1 ครั้ง
+- ร่วมพิธีถวายพระพรฯ ฝั่ง ม.ปลาย 1 ครั้ง
+- ไม่ทราบสาเหตุ 2 ครั้ง", "chitsuksa_summary": "ไม่เข้าจิตศึกษา 4 ครั้ง
+- ครูที่ปรึกษาติดค่ายคุณธรรม 1 ครั้ง
+- ครูที่ปรึกษาลากิจ 1 ครั้ง
+- ครูร่วมพิธีเปิดการอบรมแผนป้องกันแผ่นดินไหวและอัคคีภัย ณ หอประชุมพญามังราย 1 ครั้ง
+- ไม่ทราบสาเหตุ 1 ครั้ง", "homeroom_count": 8, "chitsuksa_count": 0, "total_missed": 8}, {"no": 20, "name": "นางสาววรางคณา ฉันทะ", "room": "ม.1.14", "lineup_summary": "-", "homeroom_summary": "ไม่เข้าโฮมรูม จำนวน 8 ครั้ง
+- ซ้อมโครงงานนักเรียน 6 ครั้ง
+- อบรมงานวิจัย 1 ครั้ง
+- พานักเรียนไปแข่งทักษะ ที่จังหวัดระยอง 1 ครั้ง", "chitsuksa_summary": "ไม่เข้ากิจกรรมจิตศึกษา จำนวน 10 ครั้ง
+- ซ้อมโครงงานนักเรียน 7 ครั้ง
+- นักเรียนห้องคู่ เข้าค่ายคุณธรรมที่ GMS 1 ครั้ง
+- ประชุมแข่งทักษะ 1 ครั้ง
+- พานักเรียนไปแข่งทักษะ ที่จังหวัดระยอง 1 ครั้ง", "homeroom_count": 8, "chitsuksa_count": 10, "total_missed": 18}, {"no": 21, "name": "นางสาวหทัยชนก เสาร์แก้ว", "room": "ม.1.14", "lineup_summary": "-", "homeroom_summary": "ไม่เข้าโฮมรูม จำนวน 5 ครั้ง
+- ดูแลคัดกรองสายตานักเรียนที่ห้องพญาสัตบรรณ 1 ครั้ง
+- ซ้อมโครงงานนักเรียน 1 ครั้ง
+- อบรมงานวิจัย 1 ครั้ง
+- ซ้อมศิลปหัตถกรรมนักเรียน ￼ 2 ครั้ง", "chitsuksa_summary": "ไม่เข้ากิจกรรมจิตศึกษา จำนวน 9 ครั้ง
+- ประชุมงานเสริมสุขภาพกับ รองผู้อำนวยการสถานศึกษา 1 ครั้ง
+- ประชุมกลุ่มสาระสุขศึกษาพลศึกษา กับผู้บริหาร 1 ครั้ง
+- ลาป่วย 1 ครั้ง
+- ประชุมกลุ่มสาระ เรื่องกีฬา อปท. จ. ตาก 1 ครั้ง
+- นักเรียนห้องคู่ เข้าค่ายคุณธรรมที่ GMS 1 ครั้ง
+- ร่วมพิธีเปิด อบรมเพศวิถี 1 ครั้ง
+- ซ้อมโครงงานนักเรียน 2 ครั้ง
+- ประชุมแข่งทักษะ 1 ครั้ง", "homeroom_count": 5, "chitsuksa_count": 9, "total_missed": 14}, {"no": 22, "name": "ว่าที่ร้อยตรีหญิงรุ่งทิวา ณรงค์ฤทธิ์", "room": "ม.1.15", "lineup_summary": "-", "homeroom_summary": "ไม่เข้าโฮมรูม จำนวน 9 ครั้ง
+- ซ้อมโครงงานคณิตศาสตร์ ห้อง 434 1 ครั้ง
+- ซ้อมโครงงานคณิตศาสตร์ 1 ครั้ง
+- ไปแข่งทักษะ 1 ครั้ง
+- ซ้อมโครงงาน 2 ครั้ง
+- ไปร่วมงานฝั่ง ม.ปลาย 1 ครั้ง
+- ไปแข่งทักษะที่ระยอง 1 ครั้ง
+- ไปประชุม 1 ครั้ง
+- เอาโครงงานไปส่งที่สามัคคี 1 ครั้ง", "chitsuksa_summary": "ไม่เข้ากิจกรรมจิตศึกษา จำนวน 7 ครั้ง
+- ซ้อมโครงงานคณิตศาสตร์ ห้อง 434 1 ครั้ง
+- ประชุมวันไหว้ครู ห้องกิจการนักเรียน 1 ครั้ง
+- ไปแข่งทักษะ 1 ครั้ง
+- ซ้อมโครงงาน 1 ครั้ง
+- ติดแข่ง180ไอคิว 1 ครั้ง
+- ประชุมแข่งทักษะ 1 ครั้ง
+- ไปแข่งทักษะที่ระยอง 1 ครั้ง", "homeroom_count": 9, "chitsuksa_count": 7, "total_missed": 16}, {"no": 23, "name": "นางสาวมนัญชยา แรมจันทร์", "room": "ม.1.15", "lineup_summary": "-", "homeroom_summary": "ไม่เข้าโฮมรูม จำนวน 10 ครั้ง
+- ซ้อมละครจีน 5 ครั้ง
+- เตรียมวิพากษ์ละครจีน 1 ครั้ง
+- ไปแข่งทักษะ 1 ครั้ง
+- ไปร่วมงานฝั่ง ม.ปลาย 1 ครั้ง
+- ไปแข่งทักษะที่ระยอง 1 ครั้ง
+- ซ้อมนักเรียนแข่งศิลปะหัตกรรม 1 ครั้ง", "chitsuksa_summary": "ไม่เข้ากิจกรรมจิตศึกษา จำนวน 8 ครั้ง
+- ซ้อมละครจีน 4 ครั้ง
+- ไปแข่งทักษะ 1 ครั้ง
+- ประชุมแข่งทักษะ 1 ครั้ง
+- ไปแข่งทักษะที่ระยอง 1 ครั้ง
+- ซ้อมนักเรียนแข่งศิลปะหัตถกรรม 1 ครั้ง", "homeroom_count": 10, "chitsuksa_count": 8, "total_missed": 18}, {"no": 24, "name": "นายพงศธร ปิงยศ", "room": "ม.1.16", "lineup_summary": "-", "homeroom_summary": "ไม่เข้าโฮมรูม จำนวน 8 ครั้ง
+- ดูแลนักเรียนคัดกรองสายตาที่ห้องพญาสัตบรรณ 1 ครั้ง
+- ดูแลนักเรียนฝึกซ้อมคัดลายมือ 1 ครั้ง
+- ไปแข่งทักษะ วันที่ 15-18 มิถุนายน 69 1 ครั้ง
+- ไปราชการ อบรมที่สถาบันเทคโนโลยีพระจอมเกล้า เจ้าคุณทหารลาดกระบัง วันที่ 22-24 มิถุนายน 2569 ครับ 1 ครั้ง
+- ลาป่วย เนื่องจากมีไข้ และอาเจียน 1 ครั้ง
+- ไม่่เข้าเนื่องจากฝึกนักเรียนอ่านทำนองเสนาะที่ห้องพยาบาล 1 ครั้ง
+- พานักเรียนไปแข่งทักษะที่จังหวัดระยอง 1 ครั้ง
+- ขออนุญาตไม่เข้าแถวเนื่องจากซ้อมอ่านทำนองเสนาะที่ห้องพยาบาล 1 ครั้ง", "chitsuksa_summary": "ไม่เข้ากิจกรรมจิตศึกษา จำนวน 7 ครั้ง
+- ไปแข่งทักษะ วันที่ 15-18 มิถุนายน 69 1 ครั้ง
+- ขออนุญาตไม่เข้าแถวเนื่องจากสอบแข่งทักษะภาษาไทยที่โรงอาหาร 1 ครั้ง
+- เนื่องจากเฝ้านักเรียนอบรมเพศวิถี ที่ห้องพญาสัตบรรณ 1 ครั้ง
+- ไม่เข้าจิตศึกษาเนื่องจากติวคนเก่งภาษาไทยที่ห้องพยาบาล 1 ครั้ง
+- ไม่่เข้าเนื่องจากฝึกนักเรียนอ่านทำนองเสนาะที่ห้องพยาบาล 1 ครั้ง
+- พานักเรียนไปแข่งทักษะที่จังหวัดระยอง 1 ครั้ง
+- ขออนุญาตไม่เข้าแถวเนื่องจากซ้อมอ่านทำนองเสนาะที่ห้องพยาบาล 1 ครั้ง", "homeroom_count": 8, "chitsuksa_count": 7, "total_missed": 15}, {"no": 25, "name": "นางจันทนา ทาวิรัตน์", "room": "ม.1.17", "lineup_summary": "-", "homeroom_summary": "ไม่เข้าโฮมรูมจำนวน 5 ครั้ง
+-เดินทางกลับจากต่างประเทศ 1 ครั้ง
+-เวรตรวจนักเรียนมาสาย 1 ครั้ง
+-ลาป่วย 2 ครั้ง
+-ร่วมงานถวายพระพรฝั่ง ม.ปลาย 1 ครั้ง", "chitsuksa_summary": "ไม่เข้ากิจกรรมจิตศึกษาจำนวน 1 ครั้ง
+-ลาป่วย 1 ครั้ง", "homeroom_count": 5, "chitsuksa_count": 1, "total_missed": 6}, {"no": 26, "name": "นางสาวธีร์สุดา  สืบแสน", "room": "ม.1.17", "lineup_summary": "-", "homeroom_summary": "ไม่่เข้าโฮมรูมจำนวน 7 ครั้ง
+-ประชุมค่ายภูมิศาสตร์ 2 ครั้ง
+-สัมภาษณ์นักเรียนพระราชทาน 1 ครั้ง
+-ไปราชการที่สถาบันเทคโนโลยีพระจอมเกล้า เจ้าคุณทหารลาดกระบัง 1 ครั้ง
+-ร่วมพิธีเปิดค่ายคุณธรรม ม.4 1 ครั้ง
+-ร่วมงานถวายพระพรฝั่ง ม.ปลาย 1 ครั้ง
+-ประชุมนักเรียนต้นกล้าคุณธรรม 1 ครั้ง", "chitsuksa_summary": "ไม่เข้้ากิจกรรมจิตศึกษาจำนวน 1 ครั้ง
+-ร่วมพิธีเปิดค่ายคุณธรรม ม.1 1 ครั้ง", "homeroom_count": 7, "chitsuksa_count": 1, "total_missed": 8}, {"no": 27, "name": "นางนภัสนันท์ เพชรศิริ", "room": "ม.1.18", "lineup_summary": "-", "homeroom_summary": "ไม่เข้าโฮมรููมจำนวน 10 ครั้ง
+-ฝึกซ้อมละครภาษาจีน 4 ครั้ง
+-วิพากย์ละครภาษาจีน 1 ครั้ง
+-แข่งทักษะวิชาการ 2 ครั้ง
+-ประชุมแข่งทักษะวิชาการ ม.ปลาย 1 ครั้ง
+-ฝึกซ้อมนักเรียนแข่งทักษะวิชาการ 1 ครั้ง
+-ลาป่วย 1 ครั้ง", "chitsuksa_summary": "ไม่เข้ากิจกรรมจิิตศึกษาจำนวน 9 ครั้ง
+-ฝึกซ้อมละครภาษาจีน 5 ครั้ง
+-แข่งทักษะวิชาการ 2 ครั้ง
+-ประชุมเตรียมความพร้อมแข่งขันทักษะวิชาการ 1 ครั้ง
+-ฝึกซ้อมนักเรียนแข่งทักษะวิชาการ 1 ครั้ง", "homeroom_count": 10, "chitsuksa_count": 9, "total_missed": 19}, {"no": 28, "name": "นางสาวพัชรินทร์ เตชะ", "room": "ม.1.19", "lineup_summary": "-", "homeroom_summary": "ไม่เข้าโฮมรูมจำนวน 5 ครั้ง
+-ซ้อมนักเรียนคนเก่งอังกฤษ 2 ครั้ง
+-แข่งขันทักษะที่จังหวัดสุโขทัย 1 ครั้ง
+-แข่งทักษะที่จังหวัดระยอง 1 ครั้ง
+-ร่วมถวายพระพรวันแม่ฝั่ง ม.ปลาย 1 ครั้ง", "chitsuksa_summary": "ไม่เข้ากิจกรรมจิตศึึกษาจำนวน 2 ครั้ง
+-ประชุมแข่งทักษะ 1 ครั้ง
+-แข่งขันทักษะที่จังหวัดระยอง 1 ครั้ง", "homeroom_count": 5, "chitsuksa_count": 2, "total_missed": 7}, {"no": 29, "name": "นางดิ่งธิวา ธรรมวัง", "room": "ม.1.20", "lineup_summary": "-", "homeroom_summary": "ไม่เข้าโฮมรูมจำนวน 3 ครั้ง
+-ซ้อมโครงงานภาษาอังกฤษ 2 ครั้ง
+-ร่วมกินกรรมถวายพระพรวันแม่ฝั่ง ม.ปลาย 1 ครั้ง", "chitsuksa_summary": "ไม่เข้ากิจกรรมจิตศึกษาจำนวน 3 ครั้ง
+-เข้าร่วมกิจกรรมเข้าค่ายคุณธรรม 1 ครั้ง
+-แนะแนวนักเรียนครอบครัวเดียวกัน 1 ครั้ง
+-กิจกรรมค่าย Start Up 1 ครั้ง", "homeroom_count": 3, "chitsuksa_count": 3, "total_missed": 6}, {"no": 30, "name": "นางช่อฤทัย ยิ้มใหญ่", "room": "ม.1.21", "lineup_summary": "-", "homeroom_summary": "ไม่เข้าโฮมรูมจำนวน 5 ครั้ง
+-ติวคนเก่งภาษาอังกฤษ 2 ครั้ง
+-ซ้อมโครงงาน 1 ครั้ง
+-นำนักเรียนคนเก่งภาษาอังกฤษเข้าพบผู้บริหาร 1 ครั้ง
+-ร่วมถวายพระพรวันแม่ฝั่ง ม.ปลาย 1 ครั้ง", "chitsuksa_summary": "ไม่เข้ากิจกรรมจิตศึกษาจำนวน 5 ครั้ง
+-ไปราชการที่โรงเรียนบุญวาทย์ จ.ลำปาง 1 ครั้ง
+-นำนักเรียนคนเก่งภาษาอังกฤษไปสอบที่โรงเรียน อบจ. 1 ครั้ง
+-กิจกรรมค่าย Start Up 1 ครั้ง
+-ประชุมฝั่ง ม.ปลาย 1 ครั้ง
+-ดูแลนักเรียนห้อง 1.21 วัดสายตาที่โรงยิม 1 ครั้ง", "homeroom_count": 5, "chitsuksa_count": 5, "total_missed": 10}];
+const monthlyData = {"5": [{"no": 1, "name": "นายวราวุฒิ    วงค์น้อย", "room": "ม.1.1", "missed_count": 3, "count_display": "3 ครั้ง", "reason_display": "- ประชุม 1 ครั้ง
+- พบแพทย์ ตามนัด 1 ครั้ง
+- ซ้อมนักเรียนทุน 1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 3 ครั้ง
+- ประชุม 1 ครั้ง
+- พบแพทย์ ตามนัด 1 ครั้ง
+- ซ้อมนักเรียนทุน 1 ครั้ง"}, {"no": 2, "name": "นางสาววริศลา  ศักดิ์แสน", "room": "ม.1.1", "missed_count": 2, "count_display": "2 ครั้ง", "reason_display": "- ซ้อมแข่งขันทักษะ 2 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 2 ครั้ง
+- ซ้อมแข่งขันทักษะ 2 ครั้ง"}, {"no": 3, "name": "นางสาวเปรมฤดี    ไชยรัตน์", "room": "ม.1.2", "missed_count": 3, "count_display": "3 ครั้ง", "reason_display": "- ติว Gifted Math 1 ครั้ง
+- ไปศึกษาดูงาน 1 ครั้ง
+- ประชุม 1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 3 ครั้ง
+- ติว Gifted Math 1 ครั้ง
+- ไปศึกษาดูงาน 1 ครั้ง
+- ประชุม 1 ครั้ง"}, {"no": 4, "name": "นางสาวอังคณา  ฮ่วนสกุล", "room": "ม.1.3", "missed_count": 6, "count_display": "6 ครั้ง", "reason_display": "- ซ้้อมโครงงาน 4 ครั้ง
+- ไปศึกษาดูงาน 2 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 6 ครั้ง
+- ซ้้อมโครงงาน 4 ครั้ง
+- ไปศึกษาดูงาน 2 ครั้ง"}, {"no": 5, "name": "นายเขตตะวัน กันแก้ว", "room": "ม.1.3", "missed_count": 2, "count_display": "2 ครั้ง", "reason_display": "- ซ้อมแข่งขันทักษะ 2 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 2 ครั้ง
+- ซ้อมแข่งขันทักษะ 2 ครั้ง"}, {"no": 6, "name": "นางสาวพรรณนิภา  มูลโมกข์", "room": "ม.1.4", "missed_count": 2, "count_display": "2 ครั้ง", "reason_display": "- ติิวคนเก่งภาษาไทย 1 ครั้ง
+- ลาป่วย 1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 2 ครั้ง
+- ติิวคนเก่งภาษาไทย 1 ครั้ง
+- ลาป่วย 1 ครั้ง"}, {"no": 7, "name": "นางสาวฐิติพร ดอนชัย", "room": "ม.1.5", "missed_count": 1, "count_display": "1 ครั้ง", "reason_display": "- ลากิจ 1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 1 ครั้ง
+- ลากิจ 1 ครั้ง"}, {"no": 8, "name": "นายอุกฤษฎ์    ยังท่าไม้", "room": "ม.1.6", "missed_count": 4, "count_display": "4 ครั้ง", "reason_display": "- ซ้อมแข่งขันทักษะ 2 ครั้ง
+- ซ้อมศิลปะ 2 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 4 ครั้ง
+- ซ้อมแข่งขันทักษะ 2 ครั้ง
+- ซ้อมศิลปะ 2 ครั้ง"}, {"no": 9, "name": "นางสาวสุทธิดา ชินประกายรัตน์", "room": "ม.1.6", "missed_count": 2, "count_display": "2 ครั้ง", "reason_display": "- ซ้อมแข่งทักษะ 1 ครั้ง
+- ซ้อมโครงงาน 1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 2 ครั้ง
+- ซ้อมแข่งทักษะ 1 ครั้ง
+- ซ้อมโครงงาน 1 ครั้ง"}, {"no": 10, "name": "นายเสรี   กาบใส", "room": "ม.1.7", "missed_count": 5, "count_display": "5 ครั้ง", "reason_display": "- งานจราจร 5 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 5 ครั้ง
+- งานจราจร 5 ครั้ง"}, {"no": 11, "name": "นางสาวศิริลักษณ์ ยอดคำ", "room": "ม.1.7", "missed_count": 1, "count_display": "1 ครั้ง", "reason_display": "- ติว Gifted Math 1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 1 ครั้ง
+- ติว Gifted Math 1 ครั้ง"}, {"no": 12, "name": "นางนพมาศ วงค์ใหญ่", "room": "ม.1.8", "missed_count": 4, "count_display": "4 ครั้ง", "reason_display": "- ซ้อมโครงงาน 4 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 4 ครั้ง
+- ซ้อมโครงงาน 4 ครั้ง"}, {"no": 13, "name": "นางอรพรพรรณ ทาใหม่", "room": "ม.1.9", "missed_count": 2, "count_display": "2 ครั้ง", "reason_display": "- ติว Gifted Math 1 ครั้ง
+- ประชุม 1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 2 ครั้ง
+- ติว Gifted Math 1 ครั้ง
+- ประชุม 1 ครั้ง"}, {"no": 14, "name": "นางเกศมณี ลัทธิเดช", "room": "ม.1.10", "missed_count": 1, "count_display": "1 ครั้ง", "reason_display": "- ประชุุม 1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 1 ครั้ง
+- ประชุุม 1 ครั้ง"}, {"no": 15, "name": "นายกิษกินต์ เบิกบาน", "room": "ม.1.11", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 16, "name": "นางสาวกมลลักษณ ยอดสุวรรณ์", "room": "ม.1.11", "missed_count": 2, "count_display": "2 ครั้ง", "reason_display": "- ซ้อมโครงงาน 2 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 2 ครั้ง
+- ซ้อมโครงงาน 2 ครั้ง"}, {"no": 17, "name": "นางสาวดุษฎี พงษ์ตานี", "room": "ม.1.12", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 18, "name": "นางสาวสิริพรรณ วังมณี", "room": "ม.1.13", "missed_count": 3, "count_display": "3 ครั้ง", "reason_display": "-", "summary_display": "ไม่เข้าแถว จำนวน 3 ครั้ง"}, {"no": 19, "name": "นางสาวธนาวัฒน์ รอดไทยสงค์", "room": "ม.1.13", "missed_count": 1, "count_display": "1 ครั้ง", "reason_display": "-", "summary_display": "ไม่เข้าแถว จำนวน 1 ครั้ง"}, {"no": 20, "name": "นางสาววรางคณา ฉันทะ", "room": "ม.1.14", "missed_count": 2, "count_display": "2 ครั้ง", "reason_display": "-", "summary_display": "ไม่เข้าแถว จำนวน 2 ครั้ง"}, {"no": 21, "name": "นางสาวหทัยชนก เสาร์แก้ว", "room": "ม.1.14", "missed_count": 2, "count_display": "2 ครั้ง", "reason_display": "-", "summary_display": "ไม่เข้าแถว จำนวน 2 ครั้ง"}, {"no": 22, "name": "ว่าที่ร้อยตรีหญิงรุ่งทิวา ณรงค์ฤทธิ์", "room": "ม.1.15", "missed_count": 4, "count_display": "4 ครั้ง", "reason_display": "-", "summary_display": "ไม่เข้าแถว จำนวน 4 ครั้ง"}, {"no": 23, "name": "นางสาวมนัญชยา แรมจันทร์", "room": "ม.1.15", "missed_count": 3, "count_display": "3 ครั้ง", "reason_display": "-", "summary_display": "ไม่เข้าแถว จำนวน 3 ครั้ง"}, {"no": 24, "name": "นายพงศธร ปิงยศ", "room": "ม.1.16", "missed_count": 2, "count_display": "2 ครั้ง", "reason_display": "-", "summary_display": "ไม่เข้าแถว จำนวน 2 ครั้ง"}, {"no": 25, "name": "นางจันทนา ทาวิรัตน์", "room": "ม.1.17", "missed_count": 2, "count_display": "2 ครั้ง", "reason_display": "-", "summary_display": "ไม่เข้าแถว จำนวน 2 ครั้ง"}, {"no": 26, "name": "นางสาวธีร์สุดา  สืบแสน", "room": "ม.1.17", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 27, "name": "นางนภัสนันท์ เพชรศิริ", "room": "ม.1.18", "missed_count": 2, "count_display": "2 ครั้ง", "reason_display": "-", "summary_display": "ไม่เข้าแถว จำนวน 2 ครั้ง"}, {"no": 28, "name": "นางสาวพัชรินทร์ เตชะ", "room": "ม.1.19", "missed_count": 1, "count_display": "1 ครั้ง", "reason_display": "-", "summary_display": "ไม่เข้าแถว จำนวน 1 ครั้ง"}, {"no": 29, "name": "นางดิ่งธิวา ธรรมวัง", "room": "ม.1.20", "missed_count": 4, "count_display": "4 ครั้ง", "reason_display": "-", "summary_display": "ไม่เข้าแถว จำนวน 4 ครั้ง"}, {"no": 30, "name": "นางช่อฤทัย ยิ้มใหญ่", "room": "ม.1.21", "missed_count": 1, "count_display": "1 ครั้ง", "reason_display": "-", "summary_display": "ไม่เข้าแถว จำนวน 1 ครั้ง"}], "6": [{"no": 1, "name": "นายวราวุฒิ    วงค์น้อย", "room": "ม.1.1", "missed_count": 6, "count_display": "6 ครั้ง", "reason_display": "-วิพากย์โครงงาน 1 ครั้ง
+-สอบดาราศาสตร์ 1 ครั้ง
+-ติวโอลิมปิกดาราศาสตร์ 3 ครั้ง
+-เดินทางไปราชการ 1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 6 ครั้ง
+-วิพากย์โครงงาน 1 ครั้ง
+-สอบดาราศาสตร์ 1 ครั้ง
+-ติวโอลิมปิกดาราศาสตร์ 3 ครั้ง
+-เดินทางไปราชการ 1 ครั้ง"}, {"no": 2, "name": "นางสาววริศลา  ศักดิ์แสน", "room": "ม.1.1", "missed_count": 5, "count_display": "5 ครั้ง", "reason_display": "-ซ้อมแข่งทักษะ 2 ครั้ง
+-ประชุมแข่งทักษะ 1 ครั้ง
+-นำนักเรียนไปแข่งทักษะ 2 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 5 ครั้ง
+-ซ้อมแข่งทักษะ 2 ครั้ง
+-ประชุมแข่งทักษะ 1 ครั้ง
+-นำนักเรียนไปแข่งทักษะ 2 ครั้ง"}, {"no": 3, "name": "นางสาวเปรมฤดี    ไชยรัตน์", "room": "ม.1.2", "missed_count": 1, "count_display": "1 ครั้ง", "reason_display": "-วิิพากย์โครงงาน 1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 1 ครั้ง
+-วิิพากย์โครงงาน 1 ครั้ง"}, {"no": 4, "name": "นางสาวอังคณา  ฮ่วนสกุล", "room": "ม.1.3", "missed_count": 6, "count_display": "6 ครั้ง", "reason_display": "-ซ้้อมแข่งทักษะ 2 ครั้ง
+-ประชุมแข่งทักษะ 1 ครั้ง
+-วิพากย์โครงงาน 1 ครั้ง
+-ไปแข่งทักษะ 2 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 6 ครั้ง
+-ซ้้อมแข่งทักษะ 2 ครั้ง
+-ประชุมแข่งทักษะ 1 ครั้ง
+-วิพากย์โครงงาน 1 ครั้ง
+-ไปแข่งทักษะ 2 ครั้ง"}, {"no": 5, "name": "นายเขตตะวัน กันแก้ว", "room": "ม.1.3", "missed_count": 3, "count_display": "3 ครั้ง", "reason_display": "-ซ้อมแข่่งทักษะ 2 ครั้ง
+-งานจราจร 1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 3 ครั้ง
+-ซ้อมแข่่งทักษะ 2 ครั้ง
+-งานจราจร 1 ครั้ง"}, {"no": 6, "name": "นางสาวพรรณนิภา  มูลโมกข์", "room": "ม.1.4", "missed_count": 3, "count_display": "3 ครั้ง", "reason_display": "-ไม่ทราบสาเหตุ 1 ครั้ง
+-คัดเลือกนักเรียนอ่านทำนองเสนาะ
+-แข่งขันภาษาไทย 1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 3 ครั้ง
+-ไม่ทราบสาเหตุ 1 ครั้ง
+-คัดเลือกนักเรียนอ่านทำนองเสนาะ
+-แข่งขันภาษาไทย 1 ครั้ง"}, {"no": 7, "name": "นางสาวฐิติพร ดอนชัย", "room": "ม.1.5", "missed_count": 1, "count_display": "1 ครั้ง", "reason_display": "-นำนักเรียนไปรับทุน 1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 1 ครั้ง
+-นำนักเรียนไปรับทุน 1 ครั้ง"}, {"no": 8, "name": "นายอุกฤษฎ์    ยังท่าไม้", "room": "ม.1.6", "missed_count": 5, "count_display": "5 ครั้ง", "reason_display": "-ฝึกซ้อมแข่งทักษะ 1 ครั้ง
+-ไปแข่งทักษะ 3 ครั้ง
+-ลาป่วย 1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 5 ครั้ง
+-ฝึกซ้อมแข่งทักษะ 1 ครั้ง
+-ไปแข่งทักษะ 3 ครั้ง
+-ลาป่วย 1 ครั้ง"}, {"no": 9, "name": "นางสาวสุทธิดา ชินประกายรัตน์", "room": "ม.1.6", "missed_count": 3, "count_display": "3 ครั้ง", "reason_display": "-ประชุมต้นกล้าคุณธรรม 1 ครั้ง
+-วิพากย์โครงงาน 1 ครั้ง
+-ซ้อมแข่งทักษะ 1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 3 ครั้ง
+-ประชุมต้นกล้าคุณธรรม 1 ครั้ง
+-วิพากย์โครงงาน 1 ครั้ง
+-ซ้อมแข่งทักษะ 1 ครั้ง"}, {"no": 10, "name": "นายเสรี   กาบใส", "room": "ม.1.7", "missed_count": 10, "count_display": "10 ครั้ง", "reason_display": "-งานจราจร 10 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 10 ครั้ง
+-งานจราจร 10 ครั้ง"}, {"no": 11, "name": "นางสาวศิริลักษณ์ ยอดคำ", "room": "ม.1.7", "missed_count": 1, "count_display": "1 ครั้ง", "reason_display": "-ลาป่วย 1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 1 ครั้ง
+-ลาป่วย 1 ครั้ง"}, {"no": 12, "name": "นางนพมาศ วงค์ใหญ่", "room": "ม.1.8", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 13, "name": "นางอรพรพรรณ ทาใหม่", "room": "ม.1.9", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 14, "name": "นางเกศมณี ลัทธิเดช", "room": "ม.1.10", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 15, "name": "นายกิษกินต์ เบิกบาน", "room": "ม.1.11", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 16, "name": "นางสาวกมลลักษณ ยอดสุวรรณ์", "room": "ม.1.11", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 17, "name": "นางสาวดุษฎี พงษ์ตานี", "room": "ม.1.12", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 18, "name": "นางสาวสิริพรรณ วังมณี", "room": "ม.1.13", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 19, "name": "นางสาวธนาวัฒน์ รอดไทยสงค์", "room": "ม.1.13", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 20, "name": "นางสาววรางคณา ฉันทะ", "room": "ม.1.14", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 21, "name": "นางสาวหทัยชนก เสาร์แก้ว", "room": "ม.1.14", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 22, "name": "ว่าที่ร้อยตรีหญิงรุ่งทิวา ณรงค์ฤทธิ์", "room": "ม.1.15", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 23, "name": "นางสาวมนัญชยา แรมจันทร์", "room": "ม.1.15", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 24, "name": "นายพงศธร ปิงยศ", "room": "ม.1.16", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 25, "name": "นางจันทนา ทาวิรัตน์", "room": "ม.1.17", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 26, "name": "นางสาวธีร์สุดา  สืบแสน", "room": "ม.1.17", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 27, "name": "นางนภัสนันท์ เพชรศิริ", "room": "ม.1.18", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 28, "name": "นางสาวพัชรินทร์ เตชะ", "room": "ม.1.19", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 29, "name": "นางดิ่งธิวา ธรรมวัง", "room": "ม.1.20", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 30, "name": "นางช่อฤทัย ยิ้มใหญ่", "room": "ม.1.21", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}], "7": [{"no": 1, "name": "นายวราวุฒิ    วงค์น้อย", "room": "ม.1.1", "missed_count": 6, "count_display": "6 ครั้ง", "reason_display": "- ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง
+- ติวโอลิมปิกดาราศาสตร์  2 ครั้ง
+- ซ้อม sience show 1 ครั้ง
+- คุมสอบมินิโอลิมปิก 1 ครั้ง
+- เดินทางไปราชการ 1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 6 ครั้ง
+- ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง
+- ติวโอลิมปิกดาราศาสตร์  2 ครั้ง
+- ซ้อม sience show 1 ครั้ง
+- คุมสอบมินิโอลิมปิก 1 ครั้ง
+- เดินทางไปราชการ 1 ครั้ง"}, {"no": 2, "name": "นางสาววริศลา  ศักดิ์แสน", "room": "ม.1.1", "missed_count": 2, "count_display": "2 ครั้ง", "reason_display": "- ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง
+- ประชุมการแข่งทักษะ  1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 2 ครั้ง
+- ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง
+- ประชุมการแข่งทักษะ  1 ครั้ง"}, {"no": 3, "name": "นางสาวเปรมฤดี    ไชยรัตน์", "room": "ม.1.2", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 4, "name": "นางสาวอังคณา  ฮ่วนสกุล", "room": "ม.1.3", "missed_count": 4, "count_display": "4 ครั้ง", "reason_display": "- ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง
+- ซ้อมโครงงานวิทยาศาสตร์ 1 ครั้ง
+- คุมสอบมินิโอลิมปิก  1 ครั้ง
+- ประชุมการแข่งทักษะ  1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 4 ครั้ง
+- ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง
+- ซ้อมโครงงานวิทยาศาสตร์ 1 ครั้ง
+- คุมสอบมินิโอลิมปิก  1 ครั้ง
+- ประชุมการแข่งทักษะ  1 ครั้ง"}, {"no": 5, "name": "นายเขตตะวัน กันแก้ว", "room": "ม.1.3", "missed_count": 2, "count_display": "2 ครั้ง", "reason_display": "- ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง
+- ภารกิจงานจารจร  1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 2 ครั้ง
+- ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง
+- ภารกิจงานจารจร  1 ครั้ง"}, {"no": 6, "name": "นางสาวพรรณนิภา  มูลโมกข์", "room": "ม.1.4", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 7, "name": "นางสาวฐิติพร ดอนชัย", "room": "ม.1.5", "missed_count": 2, "count_display": "2 ครั้ง", "reason_display": "- ประชุมนักเรียน YC   1 ครั้ง
+- ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 2 ครั้ง
+- ประชุมนักเรียน YC   1 ครั้ง
+- ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง"}, {"no": 8, "name": "นายอุกฤษฎ์    ยังท่าไม้", "room": "ม.1.6", "missed_count": 5, "count_display": "5  ครั้ง", "reason_display": "-  ดูแลนักเรียนเข้าค่ายคุณธรรม   2 ครั้ง
+- ติดภาระกิิจงานจารจร  1 ครั้ง
+- เตรียมงานแห่เทียนพรรษา   1 ครั้ง
+- ประชุมการแข่งทักษะ  1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 5  ครั้ง
+-  ดูแลนักเรียนเข้าค่ายคุณธรรม   2 ครั้ง
+- ติดภาระกิิจงานจารจร  1 ครั้ง
+- เตรียมงานแห่เทียนพรรษา   1 ครั้ง
+- ประชุมการแข่งทักษะ  1 ครั้ง"}, {"no": 9, "name": "นางสาวสุทธิดา ชินประกายรัตน์", "room": "ม.1.6", "missed_count": 4, "count_display": "4 ครั้ง", "reason_display": "-   ดูแลนักเรียนเข้าค่ายคุณธรรม   2 ครั้ง
+- ลาป่วย 1 ครั้ง
+- ประชุมนักเรียนต้นกล้าคุณธรรม  1", "summary_display": "ไม่เข้าแถว จำนวน 4 ครั้ง
+-   ดูแลนักเรียนเข้าค่ายคุณธรรม   2 ครั้ง
+- ลาป่วย 1 ครั้ง
+- ประชุมนักเรียนต้นกล้าคุณธรรม  1"}, {"no": 10, "name": "นายเสรี   กาบใส", "room": "ม.1.7", "missed_count": 12, "count_display": "12 ครั้ง", "reason_display": "- ติดภาระกิจงานจารจร   12 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 12 ครั้ง
+- ติดภาระกิจงานจารจร   12 ครั้ง"}, {"no": 11, "name": "นางสาวศิริลักษณ์ ยอดคำ", "room": "ม.1.7", "missed_count": 6, "count_display": "6 ครั้ง", "reason_display": "-  ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง
+- ซ้อมนักเรียนแข่งโซดุกุ  4 ครั้ง
+- คุมสอบมินิโอลิมปิก 1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 6 ครั้ง
+-  ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง
+- ซ้อมนักเรียนแข่งโซดุกุ  4 ครั้ง
+- คุมสอบมินิโอลิมปิก 1 ครั้ง"}, {"no": 12, "name": "นางนพมาศ วงค์ใหญ่", "room": "ม.1.8", "missed_count": 1, "count_display": "1 ครั้ง", "reason_display": "- ติิวคนเก่งภาษาไทย 1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 1 ครั้ง
+- ติิวคนเก่งภาษาไทย 1 ครั้ง"}, {"no": 13, "name": "นางอรพรพรรณ ทาใหม่", "room": "ม.1.9", "missed_count": 4, "count_display": "4 ครั้ง", "reason_display": "-  ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง
+- ซ้อมนักเรียนแข่ง A-Math   3  ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 4 ครั้ง
+-  ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง
+- ซ้อมนักเรียนแข่ง A-Math   3  ครั้ง"}, {"no": 14, "name": "นางเกศมณี ลัทธิเดช", "room": "ม.1.10", "missed_count": 2, "count_display": "2 ครั้ง", "reason_display": "- ติวนักเรียนโอลิมปิคดาราศาสตร์   2  ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 2 ครั้ง
+- ติวนักเรียนโอลิมปิคดาราศาสตร์   2  ครั้ง"}, {"no": 15, "name": "นายกิษกินต์ เบิกบาน", "room": "ม.1.11", "missed_count": 3, "count_display": "3 ครั้ง", "reason_display": "- ซ้อมนักเรียนสวนสนาม  2 ครั้ง
+- ภารกิจงานจารจร   1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 3 ครั้ง
+- ซ้อมนักเรียนสวนสนาม  2 ครั้ง
+- ภารกิจงานจารจร   1 ครั้ง"}, {"no": 16, "name": "นางสาวกมลลักษณ ยอดสุวรรณ์", "room": "ม.1.11", "missed_count": 3, "count_display": "3 ครั้ง", "reason_display": "- ประชุมการแข่งทักษะ  2 ครั้ง
+- ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 3 ครั้ง
+- ประชุมการแข่งทักษะ  2 ครั้ง
+- ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง"}, {"no": 17, "name": "นางสาวดุษฎี พงษ์ตานี", "room": "ม.1.12", "missed_count": 2, "count_display": "2 ครั้ง", "reason_display": "-  ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง
+- เตรียมผลงานนักเรียนพระทาน  1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 2 ครั้ง
+-  ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง
+- เตรียมผลงานนักเรียนพระทาน  1 ครั้ง"}, {"no": 18, "name": "นางสาวสิริพรรณ วังมณี", "room": "ม.1.13", "missed_count": 3, "count_display": "3 ครั้ง", "reason_display": "-  ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง
+- ประชุมกับผู้บริการ  1 ครั้ง
+- ประชุมงานกิจการนักเรียน  1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 3 ครั้ง
+-  ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง
+- ประชุมกับผู้บริการ  1 ครั้ง
+- ประชุมงานกิจการนักเรียน  1 ครั้ง"}, {"no": 19, "name": "นางสาวธนาวัฒน์ รอดไทยสงค์", "room": "ม.1.13", "missed_count": 4, "count_display": "4 ครั้ง", "reason_display": "- ลาป่วย  1 ครั้ง
+- ดูแลนักเรียนเข้าค่ายคุณธรรม   2 ครั้ง
+- ประชุมนักเรีียนต้นกล้า  1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 4 ครั้ง
+- ลาป่วย  1 ครั้ง
+- ดูแลนักเรียนเข้าค่ายคุณธรรม   2 ครั้ง
+- ประชุมนักเรีียนต้นกล้า  1 ครั้ง"}, {"no": 20, "name": "นางสาววรางคณา ฉันทะ", "room": "ม.1.14", "missed_count": 3, "count_display": "3 ครั้ง", "reason_display": "- ประชุมแข่งทักษะ 2 ครั้ง
+- ซ้อมโครงงานวิทยาศาสตร์ 1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 3 ครั้ง
+- ประชุมแข่งทักษะ 2 ครั้ง
+- ซ้อมโครงงานวิทยาศาสตร์ 1 ครั้ง"}, {"no": 21, "name": "นางสาวหทัยชนก เสาร์แก้ว", "room": "ม.1.14", "missed_count": 1, "count_display": "1 ครั้ง", "reason_display": "- ประชุมโครงการฟันสะอาด  1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 1 ครั้ง
+- ประชุมโครงการฟันสะอาด  1 ครั้ง"}, {"no": 22, "name": "ว่าที่ร้อยตรีหญิงรุ่งทิวา ณรงค์ฤทธิ์", "room": "ม.1.15", "missed_count": 3, "count_display": "3 ครั้ง", "reason_display": "- ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง
+-ไม่ทราบสาเหตุ 1 ครั้ง
+-ประชุมแข่งทักษะ 1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 3 ครั้ง
+- ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง
+-ไม่ทราบสาเหตุ 1 ครั้ง
+-ประชุมแข่งทักษะ 1 ครั้ง"}, {"no": 23, "name": "นางสาวมนัญชยา แรมจันทร์", "room": "ม.1.15", "missed_count": 2, "count_display": "2 ครั้ง", "reason_display": "- ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง
+-ค่ายจีน ที่ GMS  1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 2 ครั้ง
+- ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง
+-ค่ายจีน ที่ GMS  1 ครั้ง"}, {"no": 24, "name": "นายพงศธร ปิงยศ", "room": "ม.1.16", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 25, "name": "นางจันทนา ทาวิรัตน์", "room": "ม.1.17", "missed_count": 3, "count_display": "3 ครั้ง", "reason_display": "- ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง
+-เวรเช็คนักเรียนมาสาย 2 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 3 ครั้ง
+- ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง
+-เวรเช็คนักเรียนมาสาย 2 ครั้ง"}, {"no": 26, "name": "นางสาวธีร์สุดา  สืบแสน", "room": "ม.1.17", "missed_count": 2, "count_display": "2 ครั้ง", "reason_display": "- ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง
+-ประชุมแกนนำต้นกล้า 1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 2 ครั้ง
+- ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง
+-ประชุมแกนนำต้นกล้า 1 ครั้ง"}, {"no": 27, "name": "นางนภัสนันท์ เพชรศิริ", "room": "ม.1.18", "missed_count": 3, "count_display": "3 ครั้ง", "reason_display": "-ซ้อมละครจีน 2 ครั้ง
+-ค่ายจีน ที่ GMS  1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 3 ครั้ง
+-ซ้อมละครจีน 2 ครั้ง
+-ค่ายจีน ที่ GMS  1 ครั้ง"}, {"no": 28, "name": "นางสาวพัชรินทร์ เตชะ", "room": "ม.1.19", "missed_count": 1, "count_display": "1 ครั้ง", "reason_display": "-ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 1 ครั้ง
+-ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง"}, {"no": 29, "name": "นางดิ่งธิวา ธรรมวัง", "room": "ม.1.20", "missed_count": 3, "count_display": "3 ครั้ง", "reason_display": "-ประชุมทักษะวิชาการ 1 ครั้ง
+-ซ้อมโครงงาน 1 ครั้ง
+-ประชุม 1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 3 ครั้ง
+-ประชุมทักษะวิชาการ 1 ครั้ง
+-ซ้อมโครงงาน 1 ครั้ง
+-ประชุม 1 ครั้ง"}, {"no": 30, "name": "นางช่อฤทัย ยิ้มใหญ่", "room": "ม.1.21", "missed_count": 2, "count_display": "2 ครั้ง", "reason_display": "- ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง
+-ไม่ทราบสาเหตุ 1 ครั้ง", "summary_display": "ไม่เข้าแถว จำนวน 2 ครั้ง
+- ดูแลนักเรียนเข้าค่ายคุณธรรม   1 ครั้ง
+-ไม่ทราบสาเหตุ 1 ครั้ง"}], "8": [{"no": 1, "name": "นายวราวุฒิ    วงค์น้อย", "room": "ม.1.1", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 2, "name": "นางสาววริศลา  ศักดิ์แสน", "room": "ม.1.1", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 3, "name": "นางสาวเปรมฤดี    ไชยรัตน์", "room": "ม.1.2", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 4, "name": "นางสาวอังคณา  ฮ่วนสกุล", "room": "ม.1.3", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 5, "name": "นายเขตตะวัน กันแก้ว", "room": "ม.1.3", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 6, "name": "นางสาวพรรณนิภา  มูลโมกข์", "room": "ม.1.4", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 7, "name": "นางสาวฐิติพร ดอนชัย", "room": "ม.1.5", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 8, "name": "นายอุกฤษฎ์    ยังท่าไม้", "room": "ม.1.6", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 9, "name": "นางสาวสุทธิดา ชินประกายรัตน์", "room": "ม.1.6", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 10, "name": "นายเสรี   กาบใส", "room": "ม.1.7", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 11, "name": "นางสาวศิริลักษณ์ ยอดคำ", "room": "ม.1.7", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 12, "name": "นางนพมาศ วงค์ใหญ่", "room": "ม.1.8", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 13, "name": "นางอรพรพรรณ ทาใหม่", "room": "ม.1.9", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 14, "name": "นางเกศมณี ลัทธิเดช", "room": "ม.1.10", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 15, "name": "นายกิษกินต์ เบิกบาน", "room": "ม.1.11", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 16, "name": "นางสาวกมลลักษณ ยอดสุวรรณ์", "room": "ม.1.11", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 17, "name": "นางสาวดุษฎี พงษ์ตานี", "room": "ม.1.12", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 18, "name": "นางสาวสิริพรรณ วังมณี", "room": "ม.1.13", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 19, "name": "นางสาวธนาวัฒน์ รอดไทยสงค์", "room": "ม.1.13", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 20, "name": "นางสาววรางคณา ฉันทะ", "room": "ม.1.14", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 21, "name": "นางสาวหทัยชนก เสาร์แก้ว", "room": "ม.1.14", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 22, "name": "ว่าที่ร้อยตรีหญิงรุ่งทิวา ณรงค์ฤทธิ์", "room": "ม.1.15", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 23, "name": "นางสาวมนัญชยา แรมจันทร์", "room": "ม.1.15", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 24, "name": "นายพงศธร ปิงยศ", "room": "ม.1.16", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 25, "name": "นางจันทนา ทาวิรัตน์", "room": "ม.1.17", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 26, "name": "นางสาวธีร์สุดา  สืบแสน", "room": "ม.1.17", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 27, "name": "นางนภัสนันท์ เพชรศิริ", "room": "ม.1.18", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 28, "name": "นางสาวพัชรินทร์ เตชะ", "room": "ม.1.19", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 29, "name": "นางดิ่งธิวา ธรรมวัง", "room": "ม.1.20", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 30, "name": "นางช่อฤทัย ยิ้มใหญ่", "room": "ม.1.21", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}], "9": [{"no": 1, "name": "นายวราวุฒิ    วงค์น้อย", "room": "ม.1.1", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 2, "name": "นางสาววริศลา  ศักดิ์แสน", "room": "ม.1.1", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 3, "name": "นางสาวเปรมฤดี    ไชยรัตน์", "room": "ม.1.2", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 4, "name": "นางสาวอังคณา  ฮ่วนสกุล", "room": "ม.1.3", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 5, "name": "นายเขตตะวัน กันแก้ว", "room": "ม.1.3", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 6, "name": "นางสาวพรรณนิภา  มูลโมกข์", "room": "ม.1.4", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 7, "name": "นางสาวฐิติพร ดอนชัย", "room": "ม.1.5", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 8, "name": "นายอุกฤษฎ์    ยังท่าไม้", "room": "ม.1.6", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 9, "name": "นางสาวสุทธิดา ชินประกายรัตน์", "room": "ม.1.6", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 10, "name": "นายเสรี   กาบใส", "room": "ม.1.7", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 11, "name": "นางสาวศิริลักษณ์ ยอดคำ", "room": "ม.1.7", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 12, "name": "นางนพมาศ วงค์ใหญ่", "room": "ม.1.8", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 13, "name": "นางอรพรพรรณ ทาใหม่", "room": "ม.1.9", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 14, "name": "นางเกศมณี ลัทธิเดช", "room": "ม.1.10", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 15, "name": "นายกิษกินต์ เบิกบาน", "room": "ม.1.11", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 16, "name": "นางสาวกมลลักษณ ยอดสุวรรณ์", "room": "ม.1.11", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 17, "name": "นางสาวดุษฎี พงษ์ตานี", "room": "ม.1.12", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 18, "name": "นางสาวสิริพรรณ วังมณี", "room": "ม.1.13", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 19, "name": "นางสาวธนาวัฒน์ รอดไทยสงค์", "room": "ม.1.13", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 20, "name": "นางสาววรางคณา ฉันทะ", "room": "ม.1.14", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 21, "name": "นางสาวหทัยชนก เสาร์แก้ว", "room": "ม.1.14", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 22, "name": "ว่าที่ร้อยตรีหญิงรุ่งทิวา ณรงค์ฤทธิ์", "room": "ม.1.15", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 23, "name": "นางสาวมนัญชยา แรมจันทร์", "room": "ม.1.15", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 24, "name": "นายพงศธร ปิงยศ", "room": "ม.1.16", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 25, "name": "นางจันทนา ทาวิรัตน์", "room": "ม.1.17", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 26, "name": "นางสาวธีร์สุดา  สืบแสน", "room": "ม.1.17", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 27, "name": "นางนภัสนันท์ เพชรศิริ", "room": "ม.1.18", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 28, "name": "นางสาวพัชรินทร์ เตชะ", "room": "ม.1.19", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 29, "name": "นางดิ่งธิวา ธรรมวัง", "room": "ม.1.20", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}, {"no": 30, "name": "นางช่อฤทัย ยิ้มใหญ่", "room": "ม.1.21", "missed_count": 0, "count_display": "-", "reason_display": "-", "summary_display": "-"}]};
+
+let currentTab = 'all';
+
+const monthNames = {
+    '5': 'พฤษภาคม',
+    '6': 'มิถุนายน',
+    '7': 'กรกฎาคม',
+    '8': 'สิงหาคม',
+    '9': 'กันยายน'
+};
+
+const monthSheetNames = {
+    '5': 'เข้าแถว พ.ค จพศ',
+    '6': 'เข้าแถว มิ.ย จพศ',
+    '7': 'เข้าแถว ก.ค จพศ',
+    '8': 'เข้าแถว ส.ค. จพศ',
+    '9': 'เข้าแถว ก.ย. จพศ'
+};
+
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toastMsg').innerText = msg;
+    t.classList.add('show');
+    setTimeout(() => { t.classList.remove('show'); }, 2400);
+}
+
+function copyToClipboard(text, msg = 'คัดลอกข้อมูลเรียบร้อยแล้ว') {
+    navigator.clipboard.writeText(text).then(() => {
+        showToast(msg);
+    }).catch(err => {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast(msg);
+    });
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    return text.replace(/&/g, "&amp;")
+               .replace(/</g, "&lt;")
+               .replace(/>/g, "&gt;");
+}
+
+function switchTab(tabId) {
+    currentTab = tabId;
+    
+    // Update active tab buttons
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+
+    // Update Tips & Button texts
+    if (tabId === 'all') {
+        document.getElementById('btnCopyExcel').innerHTML = '<span>📋</span> คัดลอกตารางนี้สำหรับ Excel (วางชีต สรุปแยก)';
+        document.getElementById('tipsText').innerHTML = '<strong>วิธีนำไปใช้งาน:</strong> กดปุ่ม <b>"คัดลอกตารางนี้สำหรับ Excel"</b> แล้วเปิดไฟล์ Excel ชีต <b>"สรุปแยก"</b> คลิกที่ช่อง <b>A5</b> แล้วกด <code>Ctrl + V</code> ได้เลยครับ';
+    } else {
+        const sheetName = monthSheetNames[tabId];
+        document.getElementById('btnCopyExcel').innerHTML = `<span>📋</span> คัดลอกตารางเดือน${monthNames[tabId]} (วางชีต ${sheetName})`;
+        document.getElementById('tipsText').innerHTML = `<strong>วิธีนำไปใช้งาน:</strong> กดปุ่ม <b>"คัดลอกตารางเดือน${monthNames[tabId]}"</b> แล้วเปิดไฟล์ Excel ชีต <b>"${sheetName}"</b> คลิกที่ช่อง <b>A5</b> แล้วกด <code>Ctrl + V</code> ได้เลยครับ`;
+    }
+
+    renderView();
+}
+
+function renderView() {
+    const searchVal = document.getElementById('searchInput').value.trim().toLowerCase();
+    const roomVal = document.getElementById('roomFilter').value;
+
+    if (currentTab === 'all') {
+        renderOverall(searchVal, roomVal);
+    } else {
+        renderMonthly(currentTab, searchVal, roomVal);
+    }
+}
+
+function renderOverall(searchVal, roomVal) {
+    // Stats
+    let totalHr = 0, totalCs = 0;
+    overallData.forEach(item => {
+        totalHr += item.homeroom_count;
+        totalCs += item.chitsuksa_count;
+    });
+
+    document.getElementById('statsContainer').innerHTML = `
+        <div class="stat-card">
+            <div><div class="label">ครูที่ปรึกษาทั้งหมด</div><div class="val">30 ท่าน</div></div>
+            <div style="font-size: 32px;">👩‍🏫</div>
+        </div>
+        <div class="stat-card">
+            <div><div class="label">ห้องเรียน</div><div class="val">ม.1.1 - ม.1.21</div></div>
+            <div style="font-size: 32px;">🏫</div>
+        </div>
+        <div class="stat-card" style="border-left: 4px solid var(--pink-main);">
+            <div><div class="label">รวมไม่เข้าโฮมรูม (ช่องสีชมพู)</div><div class="val" style="color: var(--pink-main);">${totalHr} ครั้ง</div></div>
+            <div style="font-size: 32px;">🌸</div>
+        </div>
+        <div class="stat-card" style="border-left: 4px solid var(--orange-main);">
+            <div><div class="label">รวมไม่ทำจิตศึกษา (ช่องสีส้ม)</div><div class="val" style="color: var(--orange-main);">${totalCs} ครั้ง</div></div>
+            <div style="font-size: 32px;">🍊</div>
+        </div>
+    `;
+
+    // Headers
+    document.getElementById('tableHead').innerHTML = `
+        <tr>
+            <th class="col-no th-default">ลำดับ</th>
+            <th class="col-name th-default">ชื่อ - นามสกุล ครูที่ปรึกษา</th>
+            <th class="col-room th-default">ประจำห้อง</th>
+            <th class="th-pink" style="width: 48%;">🌸 จำนวนครั้งที่ไม่เข้าโฮมรูม / สาเหตุ (ช่องสีชมพู)</th>
+            <th class="th-orange" style="width: 48%;">🍊 จำนวนครั้งที่ไม่ได้ทำจิตศึกษา / สาเหตุ (ช่องสีส้ม)</th>
+        </tr>
+    `;
+
+    // Filter
+    const items = overallData.filter(item => {
+        const matchSearch = item.name.toLowerCase().includes(searchVal) ||
+                            item.room.toLowerCase().includes(searchVal) ||
+                            item.homeroom_summary.toLowerCase().includes(searchVal) ||
+                            item.chitsuksa_summary.toLowerCase().includes(searchVal);
+        const matchRoom = (roomVal === 'all') || (item.room === roomVal);
+        return matchSearch && matchRoom;
+    });
+
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
+
+    if (items.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 32px; color: #94a3b8;">ไม่พบข้อมูลที่ตรงกับการค้นหา</td></tr>';
+        return;
+    }
+
+    items.forEach(item => {
+        const tr = document.createElement('tr');
+        const isHrEmpty = !item.homeroom_summary || item.homeroom_summary === '-';
+        const isCsEmpty = !item.chitsuksa_summary || item.chitsuksa_summary === '-';
+        const isLineupEmpty = !item.lineup_summary || item.lineup_summary === '-';
+
+        tr.innerHTML = `
+            <td class="col-no">${item.no}</td>
+            <td class="col-name">${item.name}</td>
+            <td class="col-room"><span class="room-badge">${item.room}</span></td>
+            <td>
+                <div class="reason-box pink ${isHrEmpty ? 'empty' : ''}">
+                    ${isHrEmpty ? '-' : escapeHtml(item.homeroom_summary)}
+                    ${!isHrEmpty ? `<button class="copy-cell-btn" onclick="copyCellText('${escapeJs(item.homeroom_summary)}')">คัดลอก</button>` : ''}
+                </div>
+            </td>
+            <td>
+                <div class="reason-box orange ${isCsEmpty ? 'empty' : ''}">
+                    ${isCsEmpty ? '-' : escapeHtml(item.chitsuksa_summary)}
+                    ${!isCsEmpty ? `<button class="copy-cell-btn" onclick="copyCellText('${escapeJs(item.chitsuksa_summary)}')">คัดลอก</button>` : ''}
+                </div>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function renderMonthly(monthKey, searchVal, roomVal) {
+    const list = monthlyData[monthKey] || [];
+    const mName = monthNames[monthKey];
+    const sheetName = monthSheetNames[monthKey];
+
+    let totalMissed = 0;
+    let teachersMissed = 0;
+    list.forEach(t => {
+        totalMissed += t.missed_count;
+        if (t.missed_count > 0) teachersMissed++;
+    });
+
+    document.getElementById('statsContainer').innerHTML = `
+        <div class="stat-card">
+            <div><div class="label">ประจำเดือน</div><div class="val" style="color: var(--teal-main);">${mName} 2569</div></div>
+            <div style="font-size: 32px;">📅</div>
+        </div>
+        <div class="stat-card">
+            <div><div class="label">ชีตใน Excel</div><div class="val" style="font-size: 18px; font-weight: 600; color: #475569;">${sheetName}</div></div>
+            <div style="font-size: 32px;">📑</div>
+        </div>
+        <div class="stat-card" style="border-left: 4px solid var(--teal-main);">
+            <div><div class="label">ครูที่ไม่ได้เข้าแถวในเดือนนี้</div><div class="val" style="color: var(--teal-main);">${teachersMissed} / 30 ท่าน</div></div>
+            <div style="font-size: 32px;">👥</div>
+        </div>
+        <div class="stat-card" style="border-left: 4px solid #f59e0b;">
+            <div><div class="label">รวมจำนวนครั้งที่ไม่เข้าแถว</div><div class="val" style="color: #d97706;">${totalMissed} ครั้ง</div></div>
+            <div style="font-size: 32px;">📝</div>
+        </div>
+    `;
+
+    document.getElementById('tableHead').innerHTML = `
+        <tr>
+            <th class="col-no th-default">ลำดับ</th>
+            <th class="col-name th-default">ชื่อ - นามสกุล ครูที่ปรึกษา</th>
+            <th class="col-room th-default">ประจำห้อง</th>
+            <th class="th-teal" style="width: 260px;">จำนวนครั้งที่ไม่เข้าแถว เดือน${mName}</th>
+            <th class="th-teal">สาเหตุการไม่เข้าแถว เดือน${mName}</th>
+        </tr>
+    `;
+
+    const items = list.filter(item => {
+        const matchSearch = item.name.toLowerCase().includes(searchVal) ||
+                            item.room.toLowerCase().includes(searchVal) ||
+                            item.reason_display.toLowerCase().includes(searchVal);
+        const matchRoom = (roomVal === 'all') || (item.room === roomVal);
+        return matchSearch && matchRoom;
+    });
+
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
+
+    if (items.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 32px; color: #94a3b8;">ไม่พบข้อมูลที่ตรงกับการค้นหา</td></tr>';
+        return;
+    }
+
+    items.forEach(item => {
+        const tr = document.createElement('tr');
+        const isEmpty = item.missed_count === 0;
+
+        tr.innerHTML = `
+            <td class="col-no">${item.no}</td>
+            <td class="col-name">${item.name}</td>
+            <td class="col-room"><span class="room-badge">${item.room}</span></td>
+            <td>
+                <div class="reason-box teal ${isEmpty ? 'empty' : ''}">
+                    ${isEmpty ? '-' : `<strong>${escapeHtml(item.count_display)}</strong>`}
+                    ${!isEmpty ? `<button class="copy-cell-btn" onclick="copyCellText('${escapeJs(item.count_display)}')">คัดลอก</button>` : ''}
+                </div>
+            </td>
+            <td>
+                <div class="reason-box teal ${isEmpty ? 'empty' : ''}">
+                    ${isEmpty ? '-' : escapeHtml(item.reason_display)}
+                    ${!isEmpty ? `<button class="copy-cell-btn" onclick="copyCellText('${escapeJs(item.reason_display)}')">คัดลอก</button>` : ''}
+                </div>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function escapeJs(str) {
+    if (!str) return '';
+    return str.split('\\').join('\\\\').split("'").join("\\'").split('\n').join('\\n');
+}
+
+function copyCellText(text) {
+    copyToClipboard(text, 'คัดลอกข้อความแล้ว');
+}
+
+function copyActiveTableForExcel() {
+    let rows = [];
+    if (currentTab === 'all') {
+        overallData.forEach(item => {
+            const c1 = item.no;
+            const c2 = item.name;
+            const c3 = item.room;
+            const c4 = item.lineup_summary === '-' ? '' : `"${item.lineup_summary.replace(/"/g, '""')}"`;
+            const c5 = item.homeroom_summary === '-' ? '' : `"${item.homeroom_summary.replace(/"/g, '""')}"`;
+            const c6 = item.chitsuksa_summary === '-' ? '' : `"${item.chitsuksa_summary.replace(/"/g, '""')}"`;
+            rows.push([c1, c2, c3, c4, c5, c6].join('\t'));
+        });
+        copyToClipboard(rows.join('\n'), 'คัดลอกตาราง "สรุปแยก" สำหรับ Excel แล้ว! (กด Ctrl+V ที่ช่อง A5)');
+    } else {
+        const list = monthlyData[currentTab] || [];
+        const mName = monthNames[currentTab];
+        list.forEach(item => {
+            const c1 = item.no;
+            const c2 = item.name;
+            const c3 = item.room;
+            const c4 = item.missed_count === 0 ? '' : `"${item.summary_display.replace(/"/g, '""')}"`;
+            const c5 = item.missed_count === 0 ? '' : `"${item.reason_display.replace(/"/g, '""')}"`;
+            rows.push([c1, c2, c3, c4, c5].join('\t'));
+        });
+        copyToClipboard(rows.join('\n'), `คัดลอกตารางเดือน${mName} สำหรับ Excel แล้ว! (กด Ctrl+V ที่ช่อง A5 ในชีต ${monthSheetNames[currentTab]})`);
+    }
+}
+
+function copyActiveTextSummary() {
+    let lines = [];
+    if (currentTab === 'all') {
+        overallData.forEach(item => {
+            lines.push(`【ลำดับ ${item.no} ${item.name} (${item.room})】`);
+            lines.push(`• โฮมรูม (สีชมพู):`);
+            lines.push(item.homeroom_summary);
+            lines.push(`• จิตศึกษา (สีส้ม):`);
+            lines.push(item.chitsuksa_summary);
+            lines.push('----------------------------------------');
+        });
+    } else {
+        const list = monthlyData[currentTab] || [];
+        const mName = monthNames[currentTab];
+        lines.push(`=== สรุปการเข้าแถว เดือน${mName} 2569 ===`);
+        list.forEach(item => {
+            if (item.missed_count > 0) {
+                lines.push(`【ลำดับ ${item.no} ${item.name} (${item.room})】: ${item.count_display}`);
+                lines.push(item.reason_display);
+                lines.push('');
+            }
+        });
+    }
+    copyToClipboard(lines.join('\n'), 'คัดลอกข้อความสรุปแล้ว');
+}
+
+// Populate room filter
+const uniqueRooms = [...new Set(overallData.map(d => d.room))];
+const roomFilter = document.getElementById('roomFilter');
+uniqueRooms.forEach(rm => {
+    const opt = document.createElement('option');
+    opt.value = rm;
+    opt.innerText = 'ห้อง ' + rm;
+    roomFilter.appendChild(opt);
+});
+
+document.getElementById('searchInput').addEventListener('input', renderView);
+document.getElementById('roomFilter').addEventListener('change', renderView);
+
+// Initial
+renderView();
+</script>
+
+</body>
+</html>
