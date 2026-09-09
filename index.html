@@ -735,7 +735,7 @@ function renderMonthly(monthKey, searchVal, roomVal) {
 
 function escapeJs(str) {
     if (!str) return '';
-    return str.replace(/\/g, '\\').replace(/'/g, "\'").replace(/\n/g, '\n');
+    return str.split('\\').join('\\\\').split("'").join("\\'").split('\n').join('\\n');
 }
 
 function copyCellText(text) {
