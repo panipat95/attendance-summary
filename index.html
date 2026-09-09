@@ -594,9 +594,8 @@ function renderOverall(searchVal, roomVal) {
             <th class="col-no th-default">ลำดับ</th>
             <th class="col-name th-default">ชื่อ - นามสกุล ครูที่ปรึกษา</th>
             <th class="col-room th-default">ประจำห้อง</th>
-            <th class="th-default">จำนวนครั้งที่ไม่เข้าแถว / สาเหตุ</th>
-            <th class="th-pink">🌸 จำนวนครั้งที่ไม่เข้าโฮมรูม / สาเหตุ (ช่องสีชมพู)</th>
-            <th class="th-orange">🍊 จำนวนครั้งที่ไม่ได้ทำจิตศึกษา / สาเหตุ (ช่องสีส้ม)</th>
+            <th class="th-pink" style="width: 48%;">🌸 จำนวนครั้งที่ไม่เข้าโฮมรูม / สาเหตุ (ช่องสีชมพู)</th>
+            <th class="th-orange" style="width: 48%;">🍊 จำนวนครั้งที่ไม่ได้ทำจิตศึกษา / สาเหตุ (ช่องสีส้ม)</th>
         </tr>
     `;
 
@@ -628,12 +627,6 @@ function renderOverall(searchVal, roomVal) {
             <td class="col-no">${item.no}</td>
             <td class="col-name">${item.name}</td>
             <td class="col-room"><span class="room-badge">${item.room}</span></td>
-            <td>
-                <div class="reason-box ${isLineupEmpty ? 'empty' : ''}">
-                    ${isLineupEmpty ? '-' : escapeHtml(item.lineup_summary)}
-                    ${!isLineupEmpty ? `<button class="copy-cell-btn" onclick="copyCellText('${escapeJs(item.lineup_summary)}')">คัดลอก</button>` : ''}
-                </div>
-            </td>
             <td>
                 <div class="reason-box pink ${isHrEmpty ? 'empty' : ''}">
                     ${isHrEmpty ? '-' : escapeHtml(item.homeroom_summary)}
