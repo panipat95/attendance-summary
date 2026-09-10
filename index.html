@@ -188,7 +188,7 @@
         .dot-teal { background-color: #2dd4bf; }
         .dot-indigo { background-color: #818cf8; }
 
-        /* Tabs Navigation - Frosted Glass Container */
+        /* Tabs Navigation */
         .tabs-nav {
             display: flex;
             gap: 6px;
@@ -495,32 +495,6 @@
             border: 1px solid #e2e8f0;
         }
 
-        /* Month Breakdown Tags */
-        .month-breakdown-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            margin: 6px 0 8px 0;
-        }
-
-        .m-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-size: 12px;
-            background: rgba(255, 255, 255, 0.85);
-            border: 1px solid rgba(203, 213, 225, 0.8);
-            color: #475569;
-        }
-        .m-pill.has-val {
-            background: #eef2ff;
-            border-color: #c7d2fe;
-            color: #3730a3;
-            font-weight: 600;
-        }
-
         /* Table View */
         .card-table {
             background: var(--glass-bg);
@@ -554,7 +528,7 @@
 
         th.th-default { background-color: rgba(248, 250, 252, 0.75); color: #475569; }
         th.th-pink { background-color: rgba(253, 242, 248, 0.75); color: var(--pink-main); border-bottom: 2px solid rgba(244, 114, 182, 0.4); }
-        th.th-orange { background-color: rgba(255, 247, 237, 0.75); color: var(--orange-main); border-bottom: 2px solid rgba(251, 146, 60, 0.4); }
+        th.th-orange { background-color: rgba(255, 247, 237, 0.75); color: var(--orange-main); border-bottom: 2px solid rgba(251, 146, 60, 0.4); }}
         th.th-teal { background-color: rgba(240, 253, 250, 0.75); color: var(--teal-main); border-bottom: 2px solid rgba(45, 212, 191, 0.4); }
         th.th-indigo { background-color: rgba(238, 242, 255, 0.75); color: var(--indigo-main); border-bottom: 2px solid rgba(165, 180, 252, 0.5); }
 
@@ -570,9 +544,9 @@
         }
 
         .col-no { width: 55px; text-align: center; font-weight: 700; color: var(--text-muted); }
-        .col-name { width: 220px; font-weight: 600; color: #0f172a; }
+        .col-name { width: 230px; font-weight: 600; color: #0f172a; }
         .col-room { width: 95px; text-align: center; }
-        .col-month-num { width: 60px; text-align: center; font-weight: 600; }
+        .col-missed-total { width: 170px; text-align: center; }
 
         .room-badge {
             display: inline-block;
@@ -587,25 +561,29 @@
 
         .total-num-badge {
             display: inline-block;
-            padding: 4px 10px;
-            border-radius: 8px;
+            padding: 5px 12px;
+            border-radius: 10px;
             font-weight: 800;
             font-size: 15px;
             font-family: 'Plus Jakarta Sans', sans-serif;
             background: #f1f5f9;
             color: #1e293b;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
         }
         .total-num-badge.high {
-            background: #fee2e2;
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
             color: #991b1b;
+            border: 1px solid #fca5a5;
         }
         .total-num-badge.medium {
-            background: #fef3c7;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
             color: #92400e;
+            border: 1px solid #fcd34d;
         }
         .total-num-badge.normal {
-            background: #e0f2fe;
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
             color: #0369a1;
+            border: 1px solid #7dd3fc;
         }
 
         .reason-box {
@@ -860,7 +838,7 @@
                 <span>🔗 ลิงก์ชีทออนไลน์ (ID: 1EQ86CzyKT0J...)</span>
                 <span style="opacity: 0.7;">↗</span>
             </a>
-            ⏰ อัพเดทล่าสุด: 10 ก.ย. 2569 เวลา 11:21:31 น.
+            ⏰ อัพเดทล่าสุด: 10 ก.ย. 2569 เวลา 11:23:28 น.
         </div>
         <div class="legend-banner">
             <div class="legend-tag">
@@ -872,12 +850,12 @@
                 <span><b>ช่องสีส้ม</b> = กิจกรรมจิตศึกษา (13 ครั้ง)</span>
             </div>
             <div class="legend-tag">
-                <span class="color-dot dot-teal"></span>
-                <span><b>การเข้าแถว</b> = จำแนกรายเดือน (พ.ค. - ก.ย.)</span>
+                <span class="color-dot dot-indigo"></span>
+                <span><b>สรุปรวมไม่เข้าแถว</b> = รวมยอดทุกชีทพร้อมสรุปสาเหตุ</span>
             </div>
             <div class="legend-tag">
-                <span class="color-dot dot-indigo"></span>
-                <span><b>รวมเข้าแถว พ.ค.-ก.ย.</b> = สถิติสะสมตลอดเทอม</span>
+                <span class="color-dot dot-teal"></span>
+                <span><b>การเข้าแถวรายเดือน</b> = จำแนกรายเดือน (พ.ค. - ก.ย.)</span>
             </div>
         </div>
     </div>
@@ -885,7 +863,7 @@
     <!-- Navigation Tabs -->
     <div class="tabs-nav">
         <button class="tab-btn active" onclick="switchTab('all')">📑 สรุปภาพรวมตลอดเทอม (สรุปแยก)</button>
-        <button class="tab-btn highlight-tab" onclick="switchTab('lineup_summary')">📈 รวมไม่เข้าแถว พ.ค. - ก.ย. (462 ครั้ง)</button>
+        <button class="tab-btn highlight-tab" onclick="switchTab('lineup_summary')">📈 สรุปรวมไม่เข้าแถวตลอดเทอม (462 ครั้ง)</button>
         <button class="tab-btn" onclick="switchTab('5')">📅 เดือน พฤษภาคม</button>
         <button class="tab-btn" onclick="switchTab('6')">📅 เดือน มิถุนายน</button>
         <button class="tab-btn" onclick="switchTab('7')">📅 เดือน กรกฎาคม</button>
@@ -1052,8 +1030,8 @@ function switchTab(tabId) {
         document.getElementById('btnCopyExcel').innerHTML = '<span>📋</span> คัดลอกตารางนี้สำหรับ Excel (วางชีต สรุปแยก)';
         document.getElementById('tipsText').innerHTML = '<strong>วิธีนำไปใช้งาน:</strong> กดปุ่ม <b>"คัดลอกตารางนี้สำหรับ Excel"</b> แล้วเปิดไฟล์ Excel ชีต <b>"สรุปแยก"</b> คลิกที่ช่อง <b>A5</b> แล้วกด <code>Ctrl + V</code> ได้เลยครับ';
     } else if (tabId === 'lineup_summary') {
-        document.getElementById('btnCopyExcel').innerHTML = '<span>📋</span> คัดลอกตารางสรุป พ.ค.-ก.ย. สำหรับ Excel';
-        document.getElementById('tipsText').innerHTML = '<strong>วิธีนำไปใช้งาน:</strong> กดปุ่ม <b>"คัดลอกตารางสรุป พ.ค.-ก.ย. สำหรับ Excel"</b> เพื่อคัดลอกข้อมูลสรุปสถิติไม่เข้าแถวครบทั้ง 5 เดือน พร้อมยอดรวมสะสมและสาเหตุ นำไปวางในชีตรายงานสรุปภาพรวมได้ทันทีครับ';
+        document.getElementById('btnCopyExcel').innerHTML = '<span>📋</span> คัดลอกตารางสรุปไม่เข้าแถว (รวมยอด & สาเหตุ) สำหรับ Excel';
+        document.getElementById('tipsText').innerHTML = '<strong>วิธีนำไปใช้งาน:</strong> กดปุ่ม <b>"คัดลอกตารางสรุปไม่เข้าแถว สำหรับ Excel"</b> เพื่อคัดลอกข้อมูลที่รวมยอดจากทุกชีตพร้อมสรุปสาเหตุรวมตลอดทั้งเทอม (ไม่แยกเป็นเดือนๆ) ไปวางในโปรแกรม Excel ได้ทันทีครับ';
     } else {
         const sheetName = monthSheetNames[tabId];
         document.getElementById('btnCopyExcel').innerHTML = `<span>📋</span> คัดลอกตารางเดือน${monthNames[tabId]} (วางชีต ${sheetName})`;
@@ -1070,7 +1048,7 @@ function renderView() {
     if (currentTab === 'all') {
         renderOverall(searchVal, roomVal);
     } else if (currentTab === 'lineup_summary') {
-        renderLineupSummary(searchVal, roomVal);
+        renderConsolidatedLineup(searchVal, roomVal);
     } else {
         renderMonthly(currentTab, searchVal, roomVal);
     }
@@ -1225,62 +1203,80 @@ function renderOverall(searchVal, roomVal) {
     });
 }
 
-// New View: Aggregated Lineup Summary across May - Sept
-function getAggregatedLineupData() {
+// Consolidate sub-data from all monthly sheets: Total sum + Consolidated causes without separating months
+function getConsolidatedLineupData() {
     const list = [];
     const teacherCount = overallData.length;
+    const monthKeys = ['5', '6', '7', '8', '9'];
+
     for (let idx = 0; idx < teacherCount; idx++) {
         const tAll = overallData[idx];
         const no = tAll.no;
         const name = tAll.name;
         const room = tAll.room;
-        
-        const m5 = (monthlyData['5'] && monthlyData['5'][idx]) ? monthlyData['5'][idx].missed_count : 0;
-        const m6 = (monthlyData['6'] && monthlyData['6'][idx]) ? monthlyData['6'][idx].missed_count : 0;
-        const m7 = (monthlyData['7'] && monthlyData['7'][idx]) ? monthlyData['7'][idx].missed_count : 0;
-        const m8 = (monthlyData['8'] && monthlyData['8'][idx]) ? monthlyData['8'][idx].missed_count : 0;
-        const m9 = (monthlyData['9'] && monthlyData['9'][idx]) ? monthlyData['9'][idx].missed_count : 0;
-        const total = m5 + m6 + m7 + m8 + m9;
-        
-        const reasonsByMonth = [];
-        const monthKeys = ['5', '6', '7', '8', '9'];
-        let allReasonsText = [];
+
+        let totalMissed = 0;
+        const reasonsMap = {};
 
         monthKeys.forEach(mk => {
             const mItem = monthlyData[mk] && monthlyData[mk][idx];
-            if (mItem && mItem.missed_count > 0 && mItem.reason_display && mItem.reason_display !== '-') {
-                reasonsByMonth.push({
-                    monthKey: mk,
-                    monthName: monthNames[mk],
-                    count: mItem.missed_count,
-                    reasons: mItem.reason_display
-                });
-                allReasonsText.push(`[${monthNames[mk]} ${mItem.missed_count} ครั้ง]:\n${mItem.reason_display}`);
+            if (mItem) {
+                totalMissed += (mItem.missed_count || 0);
+                if (mItem.missed_count > 0 && mItem.reason_display && mItem.reason_display !== '-') {
+                    const rawLines = mItem.reason_display.split('\n');
+                    rawLines.forEach(line => {
+                        let l = line.trim();
+                        if (l.startsWith('-')) l = l.substring(1).trim();
+                        // Normalize Thai duplicate tone marks and spaces
+                        l = l.replace(/([\u0e30-\u0e4e])\1+/g, '$1').replace(/\s+/g, ' ').trim();
+                        if (!l) return;
+
+                        let cnt = 1;
+                        const matchCount = l.match(/(\d+)\s*ครั้ง/);
+                        if (matchCount) {
+                            cnt = parseInt(matchCount[1], 10);
+                        }
+                        let desc = l.replace(/(\d+)\s*ครั้ง/g, '').replace(/จำนวน/g, '').trim();
+                        if (!desc) desc = l;
+
+                        reasonsMap[desc] = (reasonsMap[desc] || 0) + cnt;
+                    });
+                }
             }
         });
-        
+
+        // Sort reasons descending by frequency
+        const sortedReasons = Object.entries(reasonsMap)
+            .map(([desc, cnt]) => ({ desc, cnt }))
+            .sort((a, b) => b.cnt - a.cnt);
+
+        let summaryDisplay = '-';
+        if (totalMissed > 0) {
+            const reasonLines = sortedReasons.map(r => `- ${r.desc} ${r.cnt} ครั้ง`);
+            summaryDisplay = `ไม่เข้าแถว จำนวน ${totalMissed} ครั้ง\n` + reasonLines.join('\n');
+        }
+
         list.push({
             no,
             name,
             room,
-            m5, m6, m7, m8, m9,
-            total,
-            reasonsByMonth,
-            combinedReasonsText: allReasonsText.join('\n\n')
+            total: totalMissed,
+            reasons: sortedReasons,
+            summaryDisplay: summaryDisplay
         });
     }
     return list;
 }
 
-function renderLineupSummary(searchVal, roomVal) {
-    const allLineup = getAggregatedLineupData();
+function renderConsolidatedLineup(searchVal, roomVal) {
+    const allLineup = getConsolidatedLineupData();
 
     let grandTotal = 0;
     allLineup.forEach(item => { grandTotal += item.total; });
 
     document.getElementById('statsContainer').innerHTML = `
         <div class="stat-card" style="border-left: 4px solid var(--indigo-main);">
-            <div><div class="label">ยอดไม่เข้าแถวรวม (พ.ค. - ก.ย.)</div><div class="val" style="color: var(--indigo-main);">${grandTotal} ครั้ง</div></div>
+            <div><div class="label">ยอดไม่เข้าแถวรวมทั้งสิ้น (พ.ค. - ก.ย.)</div><div class="val" style="color: var(--indigo-main);">${grandTotal} ครั้ง</div></div>
             <div style="font-size: 32px;">🔔</div>
         </div>
         <div class="stat-card" style="border-left: 4px solid #059669;">
@@ -1301,21 +1297,16 @@ function renderLineupSummary(searchVal, roomVal) {
         <tr>
             <th class="col-no th-default">ลำดับ</th>
             <th class="col-name th-default">ชื่อ - นามสกุล ครูที่ปรึกษา</th>
-            <th class="col-room th-default">ห้อง</th>
-            <th class="col-month-num th-default">พ.ค.</th>
-            <th class="col-month-num th-default">มิ.ย.</th>
-            <th class="col-month-num th-default">ก.ค.</th>
-            <th class="col-month-num th-default">ส.ค.</th>
-            <th class="col-month-num th-default">ก.ย.</th>
-            <th class="th-indigo" style="width: 130px; text-align: center;">รวมไม่เข้าแถว</th>
-            <th class="th-indigo" style="width: 48%;">สรุปสาเหตุการไม่เข้าแถวตลอดเทอม (พ.ค. - ก.ย.)</th>
+            <th class="col-room th-default">ประจำห้อง</th>
+            <th class="col-missed-total th-indigo">จำนวนครั้งที่ไม่เข้าแถว (รวม)</th>
+            <th class="th-indigo">🔔 สรุปสาเหตุการไม่เข้าแถว (รวมสะสมตลอดเทอม ไม่แยกเดือน)</th>
         </tr>
     `;
 
     const items = allLineup.filter(item => {
         const matchSearch = item.name.toLowerCase().includes(searchVal) ||
                             item.room.toLowerCase().includes(searchVal) ||
-                            item.combinedReasonsText.toLowerCase().includes(searchVal);
+                            item.summaryDisplay.toLowerCase().includes(searchVal);
         const matchRoom = (roomVal === 'all') || (item.room === roomVal);
         return matchSearch && matchRoom;
     });
@@ -1326,7 +1317,7 @@ function renderLineupSummary(searchVal, roomVal) {
     cardsContainer.innerHTML = '';
 
     if (items.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 36px; color: #94a3b8;">ไม่พบข้อมูลที่ตรงกับการค้นหา</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 36px; color: #94a3b8;">ไม่พบข้อมูลที่ตรงกับการค้นหา</td></tr>';
         cardsContainer.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 48px; color: #94a3b8; background: var(--glass-bg); border-radius: 16px; border: 1px dashed #cbd5e1;">ไม่พบข้อมูลที่ตรงกับการค้นหา</div>';
         return;
     }
@@ -1338,16 +1329,16 @@ function renderLineupSummary(searchVal, roomVal) {
         if (item.total >= 25) badgeClass = 'total-num-badge high';
         else if (item.total >= 15) badgeClass = 'total-num-badge medium';
 
+        const countPill = isZero
+            ? '<div class="count-badge badge-success"><span>✨</span> เข้าครบ 100% (0 ครั้ง)</div>'
+            : `<div class="count-badge badge-indigo"><span>🔔</span> รวมไม่เข้าแถว <strong>${item.total}</strong> ครั้ง</div>`;
+
         let reasonsHtml = '';
-        if (isZero || item.reasonsByMonth.length === 0) {
+        if (isZero || item.reasons.length === 0) {
             reasonsHtml = '<div class="empty-hint">เข้าแถวครบถ้วน 100% ตลอดทั้งเทอม</div>';
         } else {
-            reasonsHtml = item.reasonsByMonth.map(m => `
-                <div style="margin-bottom: 6px;">
-                    <span style="font-weight: 700; color: var(--indigo-main);">[${m.monthName} - ${m.count} ครั้ง]:</span>
-                    <div style="padding-left: 10px; font-size: 13px;">${escapeHtml(m.reasons)}</div>
-                </div>
-            `).join('');
+            const lines = item.reasons.map(r => `<div>- ${escapeHtml(r.desc)} <b>${r.cnt} ครั้ง</b></div>`);
+            reasonsHtml = `<div class="reason-list">${lines.join('')}</div>`;
         }
 
         // Table row
@@ -1356,27 +1347,14 @@ function renderLineupSummary(searchVal, roomVal) {
             <td class="col-no">${item.no}</td>
             <td class="col-name">${item.name}</td>
             <td class="col-room"><span class="room-badge">${item.room}</span></td>
-            <td class="col-month-num" style="${item.m5 > 0 ? 'font-weight:700; color:#4338ca;' : 'color:#94a3b8;'}">${item.m5}</td>
-            <td class="col-month-num" style="${item.m6 > 0 ? 'font-weight:700; color:#4338ca;' : 'color:#94a3b8;'}">${item.m6}</td>
-            <td class="col-month-num" style="${item.m7 > 0 ? 'font-weight:700; color:#4338ca;' : 'color:#94a3b8;'}">${item.m7}</td>
-            <td class="col-month-num" style="${item.m8 > 0 ? 'font-weight:700; color:#4338ca;' : 'color:#94a3b8;'}">${item.m8}</td>
-            <td class="col-month-num" style="${item.m9 > 0 ? 'font-weight:700; color:#4338ca;' : 'color:#94a3b8;'}">${item.m9}</td>
-            <td style="text-align: center;">
+            <td class="col-missed-total">
                 <span class="${badgeClass}">${item.total} ครั้ง</span>
             </td>
             <td>
                 <div class="reason-box indigo ${isZero ? 'empty' : ''}">
-                    <div class="month-breakdown-tags">
-                        <span class="m-pill ${item.m5 > 0 ? 'has-val' : ''}">พ.ค.: <b>${item.m5}</b></span>
-                        <span class="m-pill ${item.m6 > 0 ? 'has-val' : ''}">มิ.ย.: <b>${item.m6}</b></span>
-                        <span class="m-pill ${item.m7 > 0 ? 'has-val' : ''}">ก.ค.: <b>${item.m7}</b></span>
-                        <span class="m-pill ${item.m8 > 0 ? 'has-val' : ''}">ส.ค.: <b>${item.m8}</b></span>
-                        <span class="m-pill ${item.m9 > 0 ? 'has-val' : ''}">ก.ย.: <b>${item.m9}</b></span>
-                    </div>
-                    <div class="reason-list">
-                        ${reasonsHtml}
-                    </div>
-                    ${!isZero ? `<button class="copy-cell-btn" onclick="copyCellText('${escapeJs(item.combinedReasonsText)}')">📋 คัดลอกสาเหตุ</button>` : ''}
+                    ${countPill}
+                    ${reasonsHtml}
+                    ${!isZero ? `<button class="copy-cell-btn" onclick="copyCellText('${escapeJs(item.summaryDisplay)}')">📋 คัดลอกสรุป</button>` : ''}
                 </div>
             </td>
         `;
@@ -1395,39 +1373,19 @@ function renderLineupSummary(searchVal, roomVal) {
                     </div>
                 </div>
                 <div>
-                    <span class="${badgeClass}">รวม ${item.total} ครั้ง</span>
+                    <span class="${badgeClass}">${item.total} ครั้ง</span>
                 </div>
             </div>
             <div class="card-body-content">
-                <div class="month-breakdown-tags">
-                    <span class="m-pill ${item.m5 > 0 ? 'has-val' : ''}">พ.ค.: <b>${item.m5}</b></span>
-                    <span class="m-pill ${item.m6 > 0 ? 'has-val' : ''}">มิ.ย.: <b>${item.m6}</b></span>
-                    <span class="m-pill ${item.m7 > 0 ? 'has-val' : ''}">ก.ค.: <b>${item.m7}</b></span>
-                    <span class="m-pill ${item.m8 > 0 ? 'has-val' : ''}">ส.ค.: <b>${item.m8}</b></span>
-                    <span class="m-pill ${item.m9 > 0 ? 'has-val' : ''}">ก.ย.: <b>${item.m9}</b></span>
-                </div>
                 <div class="card-sub-panel indigo ${isZero ? 'empty' : ''}">
-                    <div class="reason-list">
-                        ${reasonsHtml}
-                    </div>
-                    ${!isZero ? `<button class="copy-cell-btn" onclick="copySingleTeacherLineupSummary(${item.no})">📋 คัดลอกสรุป</button>` : ''}
+                    ${countPill}
+                    ${reasonsHtml}
+                    ${!isZero ? `<button class="copy-cell-btn" onclick="copyCellText('${escapeJs(item.summaryDisplay)}')">📋 คัดลอกสรุป</button>` : ''}
                 </div>
             </div>
         `;
         cardsContainer.appendChild(card);
     });
-}
-
-function copySingleTeacherLineupSummary(teacherNo) {
-    const list = getAggregatedLineupData();
-    const item = list.find(d => d.no === teacherNo);
-    if (!item) return;
-    let lines = [];
-    lines.push(`【ลำดับ ${item.no} ${item.name} (${item.room})】: รวมไม่เข้าแถว ${item.total} ครั้ง`);
-    lines.push(`ยอดรายเดือน: พ.ค. ${item.m5}, มิ.ย. ${item.m6}, ก.ค. ${item.m7}, ส.ค. ${item.m8}, ก.ย. ${item.m9}`);
-    lines.push('--- สาเหตุจำแนกตามเดือน ---');
-    lines.push(item.combinedReasonsText || 'เข้าแถวครบถ้วน');
-    copyToClipboard(lines.join('\n'), `คัดลอกสรุปการเข้าแถวของ ${item.name} แล้ว`);
 }
 
 function renderMonthly(monthKey, searchVal, roomVal) {
@@ -1573,22 +1531,16 @@ function copyActiveTableForExcel() {
         });
         copyToClipboard(rows.join('\n'), 'คัดลอกตาราง "สรุปแยก" สำหรับ Excel แล้ว! (กด Ctrl+V ที่ช่อง A5)');
     } else if (currentTab === 'lineup_summary') {
-        const list = getAggregatedLineupData();
-        rows.push(['ลำดับ', 'ชื่อ - สกุล ครูที่ปรึกษา', 'ประจำห้อง', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'รวมไม่เข้าแถว', 'สรุปสาเหตุตลอดเทอม'].join('\t'));
+        const list = getConsolidatedLineupData();
+        rows.push(['ลำดับ', 'ชื่อ - สกุล ครูที่ปรึกษา', 'ประจำห้อง', 'จำนวนครั้งที่ไม่เข้าแถว', 'สรุปสาเหตุการไม่เข้าแถว (รวมตลอดเทอม)'].join('\t'));
         list.forEach(item => {
             const c1 = item.no;
             const c2 = item.name;
             const c3 = item.room;
-            const c4 = item.m5;
-            const c5 = item.m6;
-            const c6 = item.m7;
-            const c7 = item.m8;
-            const c8 = item.m9;
-            const c9 = item.total;
-            const c10 = item.combinedReasonsText ? `"${item.combinedReasonsText.replace(/"/g, '""')}"` : '-';
-            rows.push([c1, c2, c3, c4, c5, c6, c7, c8, c9, c10].join('\t'));
+            const c4 = item.total === 0 ? '' : `"${item.summaryDisplay.replace(/"/g, '""')}"`;
+            rows.push([c1, c2, c3, item.total, c4].join('\t'));
         });
-        copyToClipboard(rows.join('\n'), 'คัดลอกตารางสรุปการเข้าแถว พ.ค.-ก.ย. สำหรับ Excel เรียบร้อยแล้ว!');
+        copyToClipboard(rows.join('\n'), 'คัดลอกตารางสรุปไม่เข้าแถวรวมทุกชีตสำหรับ Excel เรียบร้อยแล้ว! (นำไปวางช่อง A5 ได้เลย)');
     } else {
         const list = monthlyData[currentTab] || [];
         const mName = monthNames[currentTab];
@@ -1616,19 +1568,15 @@ function copyActiveTextSummary() {
             lines.push('----------------------------------------');
         });
     } else if (currentTab === 'lineup_summary') {
-        const list = getAggregatedLineupData();
+        const list = getConsolidatedLineupData();
         let totalAll = 0;
         list.forEach(i => { totalAll += i.total; });
-        lines.push(`=== สรุปสถิติการไม่เข้าแถว ครูที่ปรึกษา ม.1 (พ.ค. - ก.ย. 2569) ===`);
-        lines.push(`รวมไม่เข้าแถวทั้งสิ้น: ${totalAll} ครั้ง`);
-        lines.push(`จำแนกรายเดือน: พ.ค. 75 ครั้ง | มิ.ย. 96 ครั้ง | ก.ค. 88 ครั้ง | ส.ค. 203 ครั้ง | ก.ย. 0 ครั้ง`);
+        lines.push(`=== สรุปสถิติการไม่เข้าแถว ครูที่ปรึกษา ม.1 (รวมยอดจากทุกชีต ตลอดเทอม 1/2569) ===`);
+        lines.push(`ยอดไม่เข้าแถวรวมทั้งสิ้น: ${totalAll} ครั้ง (จากครูที่ปรึกษาทั้ง 30 ท่าน)`);
         lines.push('========================================\n');
         list.forEach(item => {
-            lines.push(`【ลำดับ ${item.no} ${item.name} (${item.room})】: รวมไม่เข้าแถว ${item.total} ครั้ง`);
-            lines.push(`สถิติรายเดือน: พ.ค. ${item.m5} | มิ.ย. ${item.m6} | ก.ค. ${item.m7} | ส.ค. ${item.m8} | ก.ย. ${item.m9}`);
-            if (item.combinedReasonsText) {
-                lines.push(`สาเหตุ:\n${item.combinedReasonsText}`);
-            }
+            lines.push(`【ลำดับ ${item.no} ${item.name} (${item.room})】:`);
+            lines.push(item.summaryDisplay);
             lines.push('----------------------------------------');
         });
     } else {
